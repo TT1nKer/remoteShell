@@ -617,14 +617,29 @@ ssh username@your_public_ip
                 </div>
                 <div class="step-content">
                     <p><strong>Windows:</strong></p>
+                    <p><em>Method 1 - Right-click menu (easiest):</em></p>
                     <ul>
-                        <li>Right-click script file <code>setup-ssh-windows-safe.ps1</code></li>
-                        <li>Select <code>Run with PowerShell as administrator</code></li>
-                        <li>If prompted about execution policy, type:</li>
+                        <li>Right-click the <code>setup-ssh-windows-safe.ps1</code> file</li>
+                        <li>Select <code>Run with PowerShell</code></li>
+                        <li>If you don't see this option, hold <code>Shift</code> while right-clicking</li>
+                    </ul>
+                    
+                    <p><em>Method 2 - PowerShell command line:</em></p>
+                    <ul>
+                        <li>Press <code>Win+X</code>, select <code>Windows PowerShell (Admin)</code></li>
+                        <li>Navigate to the script folder with <code>cd</code>, then run:</li>
                     </ul>
                     <div class="command-box">
-Set-ExecutionPolicy Bypass -Scope Process -Force
 .\setup-ssh-windows-safe.ps1
+                    </div>
+                    
+                    <p><em>If you get execution policy error, run this first:</em></p>
+                    <div class="command-box">
+Set-ExecutionPolicy Bypass -Scope Process -Force
+                    </div>
+                    
+                    <div class="info-box">
+                        <strong>💡 Note:</strong> Don't double-click .ps1 files! Windows may open them with Notepad by default. This is normal - use the methods above to run PowerShell scripts.
                     </div>
                     
                     <p><strong>Linux/Mac:</strong></p>

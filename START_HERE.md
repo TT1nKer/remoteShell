@@ -120,6 +120,9 @@ Other files are detailed documentation - read when needed.
 **Q: Can I avoid touching my home PC entirely?**
 A: No. You must perform at least one setup operation to install the server.
 
+**Q: Windows opened .ps1 file with Notepad, how to run it?**
+A: Don't double-click! Right-click → "Run with PowerShell", or open PowerShell as Admin and run `.\setup-ssh-windows-safe.ps1`
+
 **Q: What if I don't have a public IP?**
 A: Use the Tailscale solution.
 

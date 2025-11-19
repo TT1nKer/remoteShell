@@ -1,7 +1,20 @@
 # Windows SSH Server - Safe Version
 # This version uses Windows native features and won't trigger antivirus
-# Usage: irm https://raw.githubusercontent.com/TT1nKer/remoteShell/main/setup-ssh-windows-safe.ps1 | iex
-# Or: Right-click -> Run as Administrator
+#
+# HOW TO RUN:
+# Method 1 (Recommended): Open PowerShell as Administrator, then run:
+#   irm https://raw.githubusercontent.com/TT1nKer/remoteShell/main/setup-ssh-windows-safe.ps1 | iex
+#
+# Method 2: If you downloaded this file, right-click it:
+#   - Select "Run with PowerShell"
+#   - If you don't see this option, hold Shift + Right-click, then select "Run with PowerShell"
+#
+# Method 3: Open PowerShell as Administrator in the same folder, then run:
+#   .\setup-ssh-windows-safe.ps1
+#
+# Note: .ps1 is the correct PowerShell script extension
+#       Windows may open it with Notepad by default - this is normal
+#       DON'T double-click it, use one of the methods above instead
 
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host "Windows SSH Safe Setup Wizard" -ForegroundColor Cyan
