@@ -23,10 +23,17 @@
 3. Login with Google/GitHub account
 4. Enable SSH service:
 
-**Windows:**
+**Windows (Requires Windows 10 1809+ or Windows 11):**
 ```
 Settings → Apps → Optional Features → OpenSSH Server → Install
 Win+R → services.msc → OpenSSH SSH Server → Start → Automatic
+```
+
+**If OpenSSH Server not found, use PowerShell (Run as Admin):**
+```powershell
+Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
+Start-Service sshd
+Set-Service -Name sshd -StartupType 'Automatic'
 ```
 
 **Mac:**
@@ -51,10 +58,17 @@ ssh username@100.x.x.x
 
 ## Alternative: Manual SSH Setup (Free but requires router config)
 
-**Windows:**
+**Windows (Method 1 - via Settings):**
 1. Win+I → Apps → Optional Features → OpenSSH Server → Install
 2. Win+R → services.msc → OpenSSH SSH Server → Start → Automatic
 3. Configure router port forwarding (port 22 → your PC IP)
+
+**Windows (Method 2 - if not found, use PowerShell as Admin):**
+```powershell
+Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
+Start-Service sshd
+Set-Service -Name sshd -StartupType 'Automatic'
+```
 
 **Mac/Linux:**
 - See commands above

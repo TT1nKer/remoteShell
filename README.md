@@ -8,10 +8,15 @@
 2. Login (use Google/GitHub account)
 3. Enable SSH:
 
-**Windows:**
+**Windows (10 1809+/11):**
 ```
 Settings → Apps → Optional Features → OpenSSH Server → Install
 services.msc → OpenSSH SSH Server → Start
+```
+
+**Windows (PowerShell if not found):**
+```powershell
+Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
 ```
 
 **Mac:**
