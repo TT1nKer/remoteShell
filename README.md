@@ -96,3 +96,17 @@ curl -fsSL https://raw.githubusercontent.com/TT1nKer/remoteShell/main/setup-tail
 ✅ Traditional SSH needs public IP + port forwarding
 ✅ All solutions are free
 
+---
+
+## Language Versions
+
+- **English (Current):** `main` branch
+- **中文版本 (Chinese):** `cn` branch
+
+Switch to Chinese version:
+```bash
+git checkout cn
+```
+
+Or visit: https://github.com/TT1nKer/remoteShell/tree/cn
+
