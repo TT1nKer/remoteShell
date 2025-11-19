@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SSH 服务器配置向导</title>
+    <title>SSH Server Setup Wizard</title>
     <style>
         * {
             margin: 0;
@@ -12,7 +12,7 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
@@ -247,49 +247,49 @@
 </head>
 <body>
     <div class="container">
-        <h1>🚀 SSH 远程访问配置向导</h1>
-        <p class="subtitle">轻松配置，随时随地访问你的家庭电脑</p>
+        <h1>🚀 SSH Remote Access Setup Wizard</h1>
+        <p class="subtitle">Easy setup, access your home computer from anywhere</p>
         
         <div class="method-selector">
             <div class="method-card active" data-method="tailscale">
                 <div class="icon">🎯</div>
                 <div class="title">Tailscale</div>
-                <div class="desc">最简单 · 零配置 · 推荐</div>
+                <div class="desc">Easiest · Zero Config · Recommended</div>
             </div>
             <div class="method-card" data-method="manual">
                 <div class="icon">👆</div>
-                <div class="title">手动安装</div>
-                <div class="desc">最安全 · 不用脚本</div>
+                <div class="title">Manual Install</div>
+                <div class="desc">Most Secure · No Scripts</div>
             </div>
             <div class="method-card" data-method="script">
                 <div class="icon">⚡</div>
-                <div class="title">自动脚本</div>
-                <div class="desc">快速 · 自动化</div>
+                <div class="title">Auto Script</div>
+                <div class="desc">Fast · Automated</div>
             </div>
         </div>
         
-        <!-- Tailscale 方案 -->
+        <!-- Tailscale Solution -->
         <div id="tailscale-content" class="content-section active">
             <div class="success-box">
-                <strong>🎉 最佳选择！</strong> 完全不需要配置路由器，不需要公网IP，不会被杀毒软件拦截
+                <strong>🎉 Best Choice!</strong> No router configuration, no public IP needed, won't be blocked by antivirus
             </div>
             
             <div class="step">
                 <div class="step-title">
                     <span class="step-number">1</span>
-                    下载 Tailscale
+                    Download Tailscale
                 </div>
                 <div class="step-content">
-                    <p>选择你的操作系统：</p>
+                    <p>Choose your operating system:</p>
                     <div class="download-section">
                         <a href="https://tailscale.com/download/windows" class="download-btn" target="_blank">
-                            💻 Windows 版下载
+                            💻 Windows Download
                         </a>
                         <a href="https://tailscale.com/download/mac" class="download-btn" target="_blank">
-                            🍎 macOS 版下载
+                            🍎 macOS Download
                         </a>
                         <a href="https://tailscale.com/download/linux" class="download-btn" target="_blank">
-                            🐧 Linux 版下载
+                            🐧 Linux Download
                         </a>
                     </div>
                 </div>
@@ -298,14 +298,14 @@
             <div class="step">
                 <div class="step-title">
                     <span class="step-number">2</span>
-                    安装并登录
+                    Install and Login
                 </div>
                 <div class="step-content">
                     <ul>
-                        <li>运行下载的安装包</li>
-                        <li>会自动打开浏览器</li>
-                        <li>使用 Google / GitHub / Microsoft 账号登录（完全免费）</li>
-                        <li>授权完成后，Tailscale 会在后台运行</li>
+                        <li>Run the downloaded installer</li>
+                        <li>Browser will open automatically</li>
+                        <li>Login with Google / GitHub / Microsoft account (completely free)</li>
+                        <li>After authorization, Tailscale will run in the background</li>
                     </ul>
                 </div>
             </div>
@@ -313,15 +313,15 @@
             <div class="step">
                 <div class="step-title">
                     <span class="step-number">3</span>
-                    启用 SSH
+                    Enable SSH
                 </div>
                 <div class="step-content">
                     <p><strong>Windows:</strong></p>
                     <ul>
-                        <li>打开 <code>设置</code> → <code>应用</code> → <code>可选功能</code></li>
-                        <li>添加功能 → 搜索 <code>OpenSSH Server</code> → 安装</li>
-                        <li>按 <code>Win+R</code>，输入 <code>services.msc</code></li>
-                        <li>找到 <code>OpenSSH SSH Server</code>，启动并设为自动</li>
+                        <li>Open <code>Settings</code> → <code>Apps</code> → <code>Optional Features</code></li>
+                        <li>Add a feature → Search <code>OpenSSH Server</code> → Install</li>
+                        <li>Press <code>Win+R</code>, type <code>services.msc</code></li>
+                        <li>Find <code>OpenSSH SSH Server</code>, start it and set to automatic</li>
                     </ul>
                     
                     <p><strong>macOS:</strong></p>
@@ -340,10 +340,10 @@ sudo systemctl enable ssh --now
             <div class="step">
                 <div class="step-title">
                     <span class="step-number">4</span>
-                    获取 Tailscale IP
+                    Get Tailscale IP
                 </div>
                 <div class="step-content">
-                    <p>在家里电脑运行：</p>
+                    <p>Run on your home computer:</p>
                     <div class="command-box">
 # Windows (PowerShell)
 tailscale ip -4
@@ -351,60 +351,60 @@ tailscale ip -4
 # Mac/Linux
 tailscale ip -4
                     </div>
-                    <p>会显示类似 <code>100.x.x.x</code> 的IP地址</p>
+                    <p>Will display an IP address like <code>100.x.x.x</code></p>
                 </div>
             </div>
             
             <div class="step">
                 <div class="step-title">
                     <span class="step-number">5</span>
-                    在其他设备连接
+                    Connect from Other Devices
                 </div>
                 <div class="step-content">
                     <ul>
-                        <li>在你的另一台电脑/手机也安装 Tailscale</li>
-                        <li>使用<strong>相同账号</strong>登录</li>
-                        <li>打开终端/SSH客户端，输入：</li>
+                        <li>Install Tailscale on your other computer/phone</li>
+                        <li>Login with the <strong>same account</strong></li>
+                        <li>Open terminal/SSH client, type:</li>
                     </ul>
                     <div class="command-box">
-ssh 你的用户名@100.x.x.x
+ssh username@100.x.x.x
                     </div>
                     <div class="success-box">
-                        <strong>✅ 成功！</strong> 现在你可以从任何地方安全访问家里电脑了
+                        <strong>✅ Success!</strong> Now you can securely access your home computer from anywhere
                     </div>
                 </div>
             </div>
             
             <div class="info-box">
-                <strong>💡 提示：</strong>
+                <strong>💡 Tips:</strong>
                 <ul>
-                    <li>Tailscale 是点对点加密连接，非常安全</li>
-                    <li>完全不需要配置路由器</li>
-                    <li>即使你的电脑在公司/学校网络也能用</li>
-                    <li>手机 App Store / Google Play 搜索 "Tailscale"</li>
+                    <li>Tailscale uses peer-to-peer encrypted connection, very secure</li>
+                    <li>No router configuration needed at all</li>
+                    <li>Works even if your computer is on company/school network</li>
+                    <li>Mobile: Search "Tailscale" on App Store / Google Play</li>
                 </ul>
             </div>
         </div>
         
-        <!-- 手动安装方案 -->
+        <!-- Manual Installation -->
         <div id="manual-content" class="content-section">
             <div class="info-box">
-                <strong>🛡️ 最安全的方式</strong> - 使用系统自带功能，完全不会被杀毒软件拦截
+                <strong>🛡️ Most Secure Method</strong> - Uses built-in system features, won't be blocked by antivirus
             </div>
             
             <div class="step">
                 <div class="step-title">
                     <span class="step-number">1</span>
-                    安装 SSH 服务器（Windows）
+                    Install SSH Server (Windows)
                 </div>
                 <div class="step-content">
                     <ul>
-                        <li>按 <code>Win + I</code> 打开设置</li>
-                        <li>进入 <code>应用</code> → <code>可选功能</code></li>
-                        <li>点击 <code>查看功能</code></li>
-                        <li>搜索 <code>OpenSSH Server</code></li>
-                        <li>勾选并点击 <code>安装</code></li>
-                        <li>等待安装完成（约1-2分钟）</li>
+                        <li>Press <code>Win + I</code> to open Settings</li>
+                        <li>Go to <code>Apps</code> → <code>Optional Features</code></li>
+                        <li>Click <code>View Features</code></li>
+                        <li>Search <code>OpenSSH Server</code></li>
+                        <li>Check and click <code>Install</code></li>
+                        <li>Wait for installation (about 1-2 minutes)</li>
                     </ul>
                 </div>
             </div>
@@ -412,16 +412,16 @@ ssh 你的用户名@100.x.x.x
             <div class="step">
                 <div class="step-title">
                     <span class="step-number">2</span>
-                    启动 SSH 服务
+                    Start SSH Service
                 </div>
                 <div class="step-content">
                     <ul>
-                        <li>按 <code>Win + R</code>，输入 <code>services.msc</code>，回车</li>
-                        <li>找到 <code>OpenSSH SSH Server</code></li>
-                        <li>双击打开属性</li>
-                        <li>启动类型改为 <code>自动</code></li>
-                        <li>点击 <code>启动</code> 按钮</li>
-                        <li>点击 <code>确定</code></li>
+                        <li>Press <code>Win + R</code>, type <code>services.msc</code>, Enter</li>
+                        <li>Find <code>OpenSSH SSH Server</code></li>
+                        <li>Double-click to open properties</li>
+                        <li>Change startup type to <code>Automatic</code></li>
+                        <li>Click <code>Start</code> button</li>
+                        <li>Click <code>OK</code></li>
                     </ul>
                 </div>
             </div>
@@ -429,18 +429,18 @@ ssh 你的用户名@100.x.x.x
             <div class="step">
                 <div class="step-title">
                     <span class="step-number">3</span>
-                    配置防火墙
+                    Configure Firewall
                 </div>
                 <div class="step-content">
                     <ul>
-                        <li>按 <code>Win + R</code>，输入 <code>firewall.cpl</code>，回车</li>
-                        <li>点击左侧 <code>高级设置</code></li>
-                        <li>点击 <code>入站规则</code> → <code>新建规则</code></li>
-                        <li>选择 <code>端口</code> → 下一步</li>
-                        <li>选择 <code>TCP</code>，特定本地端口输入 <code>22</code> → 下一步</li>
-                        <li>选择 <code>允许连接</code> → 下一步</li>
-                        <li>全部勾选 → 下一步</li>
-                        <li>名称填 <code>SSH</code> → 完成</li>
+                        <li>Press <code>Win + R</code>, type <code>firewall.cpl</code>, Enter</li>
+                        <li>Click <code>Advanced settings</code> on the left</li>
+                        <li>Click <code>Inbound Rules</code> → <code>New Rule</code></li>
+                        <li>Select <code>Port</code> → Next</li>
+                        <li>Select <code>TCP</code>, Specific local ports type <code>22</code> → Next</li>
+                        <li>Select <code>Allow the connection</code> → Next</li>
+                        <li>Check all → Next</li>
+                        <li>Name: <code>SSH</code> → Finish</li>
                     </ul>
                 </div>
             </div>
@@ -448,77 +448,77 @@ ssh 你的用户名@100.x.x.x
             <div class="step">
                 <div class="step-title">
                     <span class="step-number">4</span>
-                    查看 IP 地址
+                    Get IP Address
                 </div>
                 <div class="step-content">
                     <ul>
-                        <li>按 <code>Win + R</code>，输入 <code>cmd</code>，回车</li>
-                        <li>输入命令：</li>
+                        <li>Press <code>Win + R</code>, type <code>cmd</code>, Enter</li>
+                        <li>Type command:</li>
                     </ul>
                     <div class="command-box">
 ipconfig
                     </div>
-                    <p>找到 <code>IPv4 地址</code>，记下来（例如：192.168.1.100）</p>
+                    <p>Find <code>IPv4 Address</code>, write it down (e.g., 192.168.1.100)</p>
                 </div>
             </div>
             
             <div class="step">
                 <div class="step-title">
                     <span class="step-number">5</span>
-                    配置路由器（可选，远程访问需要）
+                    Configure Router (Optional, needed for remote access)
                 </div>
                 <div class="step-content">
                     <ul>
-                        <li>浏览器打开路由器管理页面（通常是 192.168.1.1 或 192.168.0.1）</li>
-                        <li>找到 <code>端口转发</code> / <code>虚拟服务器</code> 设置</li>
-                        <li>添加规则：
+                        <li>Open router admin page in browser (usually 192.168.1.1 or 192.168.0.1)</li>
+                        <li>Find <code>Port Forwarding</code> / <code>Virtual Server</code> settings</li>
+                        <li>Add rule:
                             <ul>
-                                <li>外部端口：22</li>
-                                <li>内部 IP：你电脑的IP（如 192.168.1.100）</li>
-                                <li>内部端口：22</li>
-                                <li>协议：TCP</li>
+                                <li>External port: 22</li>
+                                <li>Internal IP: Your computer's IP (e.g., 192.168.1.100)</li>
+                                <li>Internal port: 22</li>
+                                <li>Protocol: TCP</li>
                             </ul>
                         </li>
-                        <li>保存设置</li>
+                        <li>Save settings</li>
                     </ul>
                 </div>
             </div>
             
             <div class="success-box">
-                <strong>✅ 完成！</strong> 现在可以通过 SSH 连接了
+                <strong>✅ Done!</strong> Now you can connect via SSH
                 <div class="command-box">
-# 局域网内连接
-ssh 你的用户名@192.168.1.100
+# Local network connection
+ssh username@192.168.1.100
 
-# 远程连接（需要配置路由器）
-ssh 你的用户名@你的公网IP
+# Remote connection (requires router configuration)
+ssh username@your_public_ip
                 </div>
             </div>
             
             <div class="warning-box">
-                <strong>⚠️ 注意：</strong> 手动安装方案只适合局域网使用，或者你已经配置好路由器端口转发。如果需要从外网访问但不想配置路由器，请使用 Tailscale 方案。
+                <strong>⚠️ Note:</strong> Manual installation is only suitable for LAN use, or if you've configured router port forwarding. If you need external access without router configuration, use Tailscale.
             </div>
         </div>
         
-        <!-- 自动脚本方案 -->
+        <!-- Auto Script Solution -->
         <div id="script-content" class="content-section">
             <div class="warning-box">
-                <strong>⚠️ 杀毒软件可能拦截</strong> - 如果被拦截，请参考下面的解决方法
+                <strong>⚠️ May be blocked by antivirus</strong> - See solutions below if blocked
             </div>
             
             <div class="step">
                 <div class="step-title">
                     <span class="step-number">1</span>
-                    下载脚本
+                    Download Script
                 </div>
                 <div class="step-content">
-                    <p>选择你的系统：</p>
+                    <p>Choose your system:</p>
                     <div class="download-section">
                         <button class="download-btn" onclick="downloadScript('windows')">
-                            💻 Windows 脚本
+                            💻 Windows Script
                         </button>
                         <button class="download-btn" onclick="downloadScript('linux')">
-                            🐧 Linux/Mac 脚本
+                            🐧 Linux/Mac Script
                         </button>
                     </div>
                 </div>
@@ -527,30 +527,25 @@ ssh 你的用户名@你的公网IP
             <div class="step">
                 <div class="step-title">
                     <span class="step-number">2</span>
-                    处理杀毒软件（如果需要）
+                    Handle Antivirus (if needed)
                 </div>
                 <div class="step-content">
-                    <p><strong>如果脚本被删除或阻止运行：</strong></p>
+                    <p><strong>If script is deleted or blocked:</strong></p>
                     
                     <p><strong>Windows Defender:</strong></p>
                     <ul>
-                        <li>右键点击脚本文件 → 属性 → 勾选 "解除锁定" → 确定</li>
-                        <li>或者：设置 → 病毒和威胁防护 → 排除项 → 添加脚本文件</li>
+                        <li>Right-click script file → Properties → Check "Unblock" → OK</li>
+                        <li>Or: Settings → Virus & threat protection → Exclusions → Add script file</li>
                     </ul>
                     
-                    <p><strong>360 安全卫士:</strong></p>
+                    <p><strong>Other Antivirus:</strong></p>
                     <ul>
-                        <li>木马防火墙 → 信任区 → 添加文件</li>
-                    </ul>
-                    
-                    <p><strong>火绒:</strong></p>
-                    <ul>
-                        <li>设置 → 信任区 → 添加文件</li>
+                        <li>Add the script file to trusted/whitelist</li>
                     </ul>
                     
                     <div class="info-box">
-                        <strong>💡 为什么会被拦截？</strong><br>
-                        杀毒软件对修改系统配置的脚本比较敏感。我们的脚本只是安装 Windows 官方组件，完全安全。你可以用记事本打开查看代码。
+                        <strong>💡 Why blocked?</strong><br>
+                        Antivirus is sensitive to scripts that modify system configuration. Our script only installs official Windows components, completely safe. You can open it with notepad to view the code.
                     </div>
                 </div>
             </div>
@@ -558,14 +553,14 @@ ssh 你的用户名@你的公网IP
             <div class="step">
                 <div class="step-title">
                     <span class="step-number">3</span>
-                    运行脚本
+                    Run Script
                 </div>
                 <div class="step-content">
                     <p><strong>Windows:</strong></p>
                     <ul>
-                        <li>右键点击脚本文件 <code>setup-ssh-windows-safe.ps1</code></li>
-                        <li>选择 <code>以管理员身份运行 PowerShell</code></li>
-                        <li>如果提示执行策略，输入：</li>
+                        <li>Right-click script file <code>setup-ssh-windows-safe.ps1</code></li>
+                        <li>Select <code>Run with PowerShell as administrator</code></li>
+                        <li>If prompted about execution policy, type:</li>
                     </ul>
                     <div class="command-box">
 Set-ExecutionPolicy Bypass -Scope Process -Force
@@ -583,61 +578,61 @@ sudo ./setup-ssh-server.sh
             <div class="step">
                 <div class="step-title">
                     <span class="step-number">4</span>
-                    跟随提示完成配置
+                    Follow Prompts
                 </div>
                 <div class="step-content">
-                    <p>脚本会自动：</p>
+                    <p>Script will automatically:</p>
                     <ul>
-                        <li>✅ 安装 SSH 服务器</li>
-                        <li>✅ 配置防火墙</li>
-                        <li>✅ 启动服务</li>
-                        <li>✅ 显示连接信息</li>
+                        <li>✅ Install SSH server</li>
+                        <li>✅ Configure firewall</li>
+                        <li>✅ Start service</li>
+                        <li>✅ Display connection info</li>
                     </ul>
                 </div>
             </div>
             
             <div class="success-box">
-                <strong>✅ 完成！</strong> 脚本会在桌面生成一个文本文件，包含连接信息
+                <strong>✅ Done!</strong> Script will create a text file on desktop with connection info
             </div>
             
             <div class="info-box">
-                <strong>💡 实在不行？</strong> 如果脚本无法运行，建议使用 <strong>手动安装</strong> 或 <strong>Tailscale</strong> 方案
+                <strong>💡 Still not working?</strong> If script won't run, use <strong>Manual Install</strong> or <strong>Tailscale</strong> method
             </div>
         </div>
     </div>
     
     <script>
-        // 切换方案
+        // Switch methods
         document.querySelectorAll('.method-card').forEach(card => {
             card.addEventListener('click', function() {
-                // 移除所有激活状态
+                // Remove all active states
                 document.querySelectorAll('.method-card').forEach(c => c.classList.remove('active'));
                 document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
                 
-                // 激活当前选择
+                // Activate current selection
                 this.classList.add('active');
                 const method = this.dataset.method;
                 document.getElementById(method + '-content').classList.add('active');
             });
         });
         
-        // 复制命令
+        // Copy command
         document.querySelectorAll('.command-box').forEach(box => {
             box.style.position = 'relative';
             const btn = document.createElement('button');
             btn.className = 'copy-btn';
-            btn.textContent = '复制';
+            btn.textContent = 'Copy';
             btn.onclick = function() {
                 const text = box.textContent.trim();
                 navigator.clipboard.writeText(text).then(() => {
-                    btn.textContent = '已复制！';
-                    setTimeout(() => btn.textContent = '复制', 2000);
+                    btn.textContent = 'Copied!';
+                    setTimeout(() => btn.textContent = 'Copy', 2000);
                 });
             };
             box.appendChild(btn);
         });
         
-        // 下载脚本
+        // Download script
         function downloadScript(type) {
             if (type === 'windows') {
                 window.open('https://raw.githubusercontent.com/TT1nKer/remoteShell/main/setup-ssh-windows-safe.ps1', '_blank');
@@ -648,5 +643,3 @@ sudo ./setup-ssh-server.sh
     </script>
 </body>
 </html>
-
-
