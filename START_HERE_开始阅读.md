@@ -34,6 +34,11 @@ Win+R → services.msc → OpenSSH SSH Server → 启动 → 自动
 Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
 Start-Service sshd
 Set-Service -Name sshd -StartupType 'Automatic'
+
+# 如果卡在40%，按 Ctrl+C 然后用 DISM 替代：
+dism /Online /Add-Capability /CapabilityName:OpenSSH.Server~~~~0.0.1.0
+Start-Service sshd
+Set-Service -Name sshd -StartupType 'Automatic'
 ```
 
 **Mac（最简单 - 通过图形界面）:**
