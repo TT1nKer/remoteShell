@@ -61,9 +61,19 @@ Then configure router port forwarding (22 → your PC IP)
 
 ## Files
 
-- `ssh-setup-gui.html` - Interactive GUI tutorial
-- `START_HERE.md` - Quick guide
-- `setup-*.sh/ps1` - Automation scripts
+### English Documentation
+- `START_HERE.md` - Quick start guide
+- `ANTIVIRUS_SOLUTION.md` - How to handle antivirus blocking
+
+### Scripts (English versions with -en suffix)
+- `setup-ssh-server-en.sh` - Mac/Linux automated setup
+- `setup-ssh-windows-safe-en.ps1` - Windows safe setup  
+- `setup-tailscale-ssh-en.sh` - Tailscale automated setup
+
+### Chinese Documentation (中文文档)
+- `START_HERE_开始阅读.md` - 中文快速指南
+- `解决杀毒软件拦截的完整方案.md` - 杀毒软件解决方案
+- Original Chinese scripts: `setup-ssh-server.sh`, `setup-ssh-server.ps1`, etc.
 
 ---
 
