@@ -622,14 +622,29 @@ ssh 你的用户名@你的公网IP
                 </div>
                 <div class="step-content">
                     <p><strong>Windows:</strong></p>
+                    <p><em>方法1 - 右键菜单（最简单）：</em></p>
                     <ul>
-                        <li>右键点击脚本文件 <code>setup-ssh-windows-safe.ps1</code></li>
-                        <li>选择 <code>以管理员身份运行 PowerShell</code></li>
-                        <li>如果提示执行策略，输入：</li>
+                        <li>右键点击 <code>setup-ssh-windows-safe.ps1</code> 文件</li>
+                        <li>选择 <code>使用 PowerShell 运行</code></li>
+                        <li>如果没有此选项，按住 <code>Shift</code> 再右键</li>
+                    </ul>
+                    
+                    <p><em>方法2 - PowerShell 命令行：</em></p>
+                    <ul>
+                        <li>按 <code>Win+X</code>，选择 <code>Windows PowerShell（管理员）</code></li>
+                        <li>用 <code>cd</code> 导航到脚本文件夹，然后运行：</li>
                     </ul>
                     <div class="command-box">
-Set-ExecutionPolicy Bypass -Scope Process -Force
 .\setup-ssh-windows-safe.ps1
+                    </div>
+                    
+                    <p><em>如果遇到执行策略错误，先运行：</em></p>
+                    <div class="command-box">
+Set-ExecutionPolicy Bypass -Scope Process -Force
+                    </div>
+                    
+                    <div class="info-box">
+                        <strong>💡 注意：</strong> 不要双击 .ps1 文件！Windows 默认会用记事本打开。这是正常的 - 请使用上述方法来运行 PowerShell 脚本。
                     </div>
                     
                     <p><strong>Linux/Mac:</strong></p>

@@ -1,7 +1,20 @@
 # Windows SSH服务器 - 安全保守版本
 # 此版本使用Windows原生功能，不会被杀毒软件误报
-# 使用方法: irm https://raw.githubusercontent.com/TT1nKer/remoteShell/cn/setup-ssh-windows-safe.ps1 | iex
-# 或者: 右键 -> 以管理员身份运行
+#
+# 运行方法：
+# 方法1（推荐）：以管理员身份打开 PowerShell，然后运行：
+#   irm https://raw.githubusercontent.com/TT1nKer/remoteShell/cn/setup-ssh-windows-safe.ps1 | iex
+#
+# 方法2：如果已下载此文件，右键点击文件：
+#   - 选择"使用 PowerShell 运行"
+#   - 如果没有此选项，按住 Shift + 右键，然后选择"使用 PowerShell 运行"
+#
+# 方法3：以管理员身份在相同文件夹打开 PowerShell，然后运行：
+#   .\setup-ssh-windows-safe.ps1
+#
+# 注意：.ps1 是正确的 PowerShell 脚本扩展名
+#       Windows 可能会默认用记事本打开它 - 这是正常的
+#       不要双击运行，请使用上述方法之一
 
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host "Windows SSH 安全配置向导" -ForegroundColor Cyan

@@ -120,6 +120,9 @@ ssh 用户名@你的公网IP
 **Q: 能完全不碰家里电脑吗？**
 A: 不能。必须至少操作一次安装服务端。
 
+**Q: Windows 用记事本打开了 .ps1 文件，怎么运行？**
+A: 不要双击！右键 → "使用 PowerShell 运行"，或以管理员身份打开 PowerShell 运行 `.\setup-ssh-windows-safe.ps1`
+
 **Q: 没有公网IP怎么办？**
 A: 用Tailscale方案。
 

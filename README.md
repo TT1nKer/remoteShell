@@ -46,9 +46,11 @@ sudo apt install openssh-server -y
 
 **Windows:**
 ```powershell
-# 以管理员运行 PowerShell
+# 方法1：右键 setup-ssh-windows-safe.ps1 → "使用 PowerShell 运行"
+# 方法2：以管理员身份打开 PowerShell，然后：
 .\setup-ssh-windows-safe.ps1
 ```
+*注意：不要双击 .ps1 文件！Windows 默认会用记事本打开。*
 
 **Mac/Linux:**
 ```bash
