@@ -53,7 +53,7 @@ sudo apt install openssh-server
 sudo systemctl enable ssh --now
 ```
 
-5. Get IP: `tailscale ip -4`
+5. Get IP (run in terminal): `tailscale ip -4`
 
 **Connect from anywhere:**
 ```bash
