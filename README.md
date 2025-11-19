@@ -1,17 +1,17 @@
-# 远程SSH配置
+# Remote SSH Setup
 
-## 最快方案（5分钟）
+## Fastest Solution (5 minutes)
 
 ### Tailscale + SSH
 
-1. 下载安装 Tailscale: https://tailscale.com/download
-2. 登录（用 Google/GitHub 账号）
-3. 启用SSH:
+1. Download Tailscale: https://tailscale.com/download
+2. Login (use Google/GitHub account)
+3. Enable SSH:
 
 **Windows:**
 ```
-设置 → 应用 → OpenSSH Server → 安装
-services.msc → OpenSSH SSH Server → 启动
+Settings → Apps → Optional Features → OpenSSH Server → Install
+services.msc → OpenSSH SSH Server → Start
 ```
 
 **Mac:**
@@ -24,18 +24,18 @@ sudo systemsetup -setremotelogin on
 sudo apt install openssh-server -y
 ```
 
-4. 获取IP: `tailscale ip -4`
-5. 连接: `ssh 用户名@100.x.x.x`
+4. Get IP: `tailscale ip -4`
+5. Connect: `ssh username@100.x.x.x`
 
 ---
 
-## 传统SSH方案
+## Traditional SSH Solution
 
-### 自动脚本
+### Automated Scripts
 
 **Windows:**
 ```powershell
-# 以管理员运行 PowerShell
+# Run PowerShell as Administrator
 .\setup-ssh-windows-safe.ps1
 ```
 
@@ -44,10 +44,10 @@ sudo apt install openssh-server -y
 sudo bash setup-ssh-server.sh
 ```
 
-### 手动安装
+### Manual Installation
 
 **Windows:**
-设置 → 应用 → OpenSSH Server → 安装 + 启动服务
+Settings → Apps → OpenSSH Server → Install + Start Service
 
 **Mac:**
 `sudo systemsetup -setremotelogin on`
@@ -55,22 +55,22 @@ sudo bash setup-ssh-server.sh
 **Linux:**
 `sudo apt install openssh-server`
 
-然后配置路由器端口转发（22 → 本机IP）
+Then configure router port forwarding (22 → your PC IP)
 
 ---
 
-## 文件
+## Files
 
-- `ssh-setup-gui.html` - 图形界面教程
-- `START_HERE_开始阅读.md` - 简要说明
-- `setup-*.sh/ps1` - 自动化脚本
+- `ssh-setup-gui.html` - Interactive GUI tutorial
+- `START_HERE.md` - Quick guide
+- `setup-*.sh/ps1` - Automation scripts
 
 ---
 
-## 关键要点
+## Key Points
 
-✅ 必须在目标电脑安装SSH服务端
-✅ Tailscale不需要配置路由器
-✅ 传统SSH需要公网IP + 端口转发
-✅ 全部方案免费
+✅ Must install SSH server on target computer
+✅ Tailscale doesn't require router configuration
+✅ Traditional SSH needs public IP + port forwarding
+✅ All solutions are free
 
