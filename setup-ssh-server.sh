@@ -1,16 +1,16 @@
 #!/bin/bash
-# SSH服务器自动化安装和配置脚本
-# 使用方法: curl -fsSL https://raw.githubusercontent.com/TT1nKer/remoteShell/main/setup-ssh-server.sh | bash
-# 或者: bash setup-ssh-server.sh
+# SSH Server Automated Installation and Configuration Script
+# Usage: curl -fsSL https://raw.githubusercontent.com/TT1nKer/remoteShell/main/setup-ssh-server.sh | bash
+# Or: bash setup-ssh-server.sh
 
 set -e
 
 echo "=================================="
-echo "SSH服务器自动化安装脚本"
+echo "SSH Server Auto-Install Script"
 echo "=================================="
 echo ""
 
-# 检测操作系统
+# Detect operating system
 detect_os() {
     if [[ "$OSTYPE" == "darwin"* ]]; then
         echo "macos"
@@ -23,66 +23,66 @@ detect_os() {
 }
 
 OS=$(detect_os)
-echo "检测到操作系统: $OS"
+echo "Detected OS: $OS"
 echo ""
 
-# 获取用户信息
+# Get user info
 CURRENT_USER=$(whoami)
-echo "当前用户: $CURRENT_USER"
+echo "Current user: $CURRENT_USER"
 
-# macOS 安装
+# macOS installation
 install_macos() {
-    echo "📦 配置 macOS SSH 服务器..."
+    echo "📦 Configuring macOS SSH server..."
     
-    # 启用远程登录
+    # Enable remote login
     sudo systemsetup -setremotelogin on
     
-    # 确保sshd服务运行
+    # Ensure sshd service is running
     sudo launchctl load -w /System/Library/LaunchDaemons/ssh.plist 2>/dev/null || true
     
-    echo "✅ macOS SSH 服务器已启用"
+    echo "✅ macOS SSH server enabled"
 }
 
-# Linux (Ubuntu/Debian) 安装
+# Linux (Ubuntu/Debian) installation
 install_debian() {
-    echo "📦 安装 OpenSSH 服务器..."
+    echo "📦 Installing OpenSSH server..."
     
-    # 静默安装
+    # Silent installation
     export DEBIAN_FRONTEND=noninteractive
     sudo apt-get update -qq
     sudo apt-get install -y -qq openssh-server
     
-    # 启动并设置开机自启
+    # Start and enable on boot
     sudo systemctl enable ssh --now
     
-    echo "✅ OpenSSH 服务器已安装并启动"
+    echo "✅ OpenSSH server installed and started"
 }
 
-# Linux (CentOS/RHEL/Fedora) 安装
+# Linux (CentOS/RHEL/Fedora) installation
 install_redhat() {
-    echo "📦 安装 OpenSSH 服务器..."
+    echo "📦 Installing OpenSSH server..."
     
     sudo yum install -y openssh-server -q
     
-    # 启动并设置开机自启
+    # Start and enable on boot
     sudo systemctl enable sshd --now
     
-    echo "✅ OpenSSH 服务器已安装并启动"
+    echo "✅ OpenSSH server installed and started"
 }
 
-# 配置SSH安全设置
+# Configure SSH security settings
 configure_ssh() {
     echo ""
-    echo "🔧 配置 SSH 安全设置..."
+    echo "🔧 Configuring SSH security settings..."
     
     SSH_CONFIG="/etc/ssh/sshd_config"
     
-    # 备份原配置
+    # Backup original config
     sudo cp "$SSH_CONFIG" "${SSH_CONFIG}.backup.$(date +%Y%m%d_%H%M%S)"
     
-    # 创建安全配置（保持密码登录以便首次连接）
+    # Create secure configuration (keep password login for initial connection)
     sudo tee "${SSH_CONFIG}.d/custom.conf" > /dev/null <<EOF
-# 自动配置的安全设置
+# Auto-configured security settings
 Port 22
 PermitRootLogin no
 PubkeyAuthentication yes
@@ -95,7 +95,7 @@ AcceptEnv LANG LC_*
 Subsystem sftp /usr/lib/openssh/sftp-server
 EOF
     
-    # 重启SSH服务
+    # Restart SSH service
     if [[ "$OS" == "macos" ]]; then
         sudo launchctl unload /System/Library/LaunchDaemons/ssh.plist 2>/dev/null || true
         sudo launchctl load -w /System/Library/LaunchDaemons/ssh.plist
@@ -103,62 +103,62 @@ EOF
         sudo systemctl restart sshd || sudo systemctl restart ssh
     fi
     
-    echo "✅ SSH 配置完成"
+    echo "✅ SSH configuration complete"
 }
 
-# 配置防火墙
+# Configure firewall
 configure_firewall() {
     echo ""
-    echo "🔥 配置防火墙..."
+    echo "🔥 Configuring firewall..."
     
     if command -v ufw &> /dev/null; then
         sudo ufw allow 22/tcp
-        echo "✅ UFW 防火墙已配置"
+        echo "✅ UFW firewall configured"
     elif command -v firewall-cmd &> /dev/null; then
         sudo firewall-cmd --permanent --add-service=ssh
         sudo firewall-cmd --reload
-        echo "✅ Firewalld 防火墙已配置"
+        echo "✅ Firewalld configured"
     else
-        echo "⚠️  未检测到防火墙，跳过配置"
+        echo "⚠️  No firewall detected, skipping configuration"
     fi
 }
 
-# 获取网络信息
+# Get network information
 get_network_info() {
     echo ""
     echo "=================================="
-    echo "📡 网络信息"
+    echo "📡 Network Information"
     echo "=================================="
     
-    # 本地IP
+    # Local IP
     if [[ "$OS" == "macos" ]]; then
-        LOCAL_IP=$(ipconfig getifaddr en0 2>/dev/null || ipconfig getifaddr en1 2>/dev/null || echo "未找到")
+        LOCAL_IP=$(ipconfig getifaddr en0 2>/dev/null || ipconfig getifaddr en1 2>/dev/null || echo "not found")
     else
         LOCAL_IP=$(hostname -I | awk '{print $1}')
     fi
     
-    echo "本地IP地址: $LOCAL_IP"
+    echo "Local IP address: $LOCAL_IP"
     
-    # 尝试获取公网IP
-    PUBLIC_IP=$(curl -s ifconfig.me 2>/dev/null || curl -s icanhazip.com 2>/dev/null || echo "无法获取")
-    echo "公网IP地址: $PUBLIC_IP"
+    # Try to get public IP
+    PUBLIC_IP=$(curl -s ifconfig.me 2>/dev/null || curl -s icanhazip.com 2>/dev/null || echo "unable to fetch")
+    echo "Public IP address: $PUBLIC_IP"
     
     echo ""
-    echo "SSH 连接命令:"
-    echo "  本地网络: ssh $CURRENT_USER@$LOCAL_IP"
-    echo "  远程连接: ssh $CURRENT_USER@$PUBLIC_IP"
-    echo "  (远程连接需要配置路由器端口转发)"
+    echo "SSH connection commands:"
+    echo "  Local network: ssh $CURRENT_USER@$LOCAL_IP"
+    echo "  Remote connection: ssh $CURRENT_USER@$PUBLIC_IP"
+    echo "  (Remote connection requires router port forwarding)"
 }
 
-# 创建便捷的公钥添加脚本
+# Create convenient key management script
 create_key_helper() {
     echo ""
-    echo "📝 创建密钥管理脚本..."
+    echo "📝 Creating key management script..."
     
     cat > ~/add-ssh-key.sh <<'KEYEOF'
 #!/bin/bash
-# 快速添加SSH公钥
-echo "请粘贴你的SSH公钥 (id_rsa.pub 或 id_ed25519.pub 的内容):"
+# Quick add SSH public key
+echo "Paste your SSH public key (contents of id_rsa.pub or id_ed25519.pub):"
 read -r pubkey
 
 mkdir -p ~/.ssh
@@ -167,14 +167,14 @@ touch ~/.ssh/authorized_keys
 chmod 600 ~/.ssh/authorized_keys
 
 echo "$pubkey" >> ~/.ssh/authorized_keys
-echo "✅ 公钥已添加！"
+echo "✅ Public key added!"
 KEYEOF
     
     chmod +x ~/add-ssh-key.sh
-    echo "✅ 已创建 ~/add-ssh-key.sh 脚本"
+    echo "✅ Created ~/add-ssh-key.sh script"
 }
 
-# 主安装流程
+# Main installation workflow
 main() {
     case "$OS" in
         macos)
@@ -191,7 +191,7 @@ main() {
             configure_firewall
             ;;
         *)
-            echo "❌ 不支持的操作系统: $OS"
+            echo "❌ Unsupported operating system: $OS"
             exit 1
             ;;
     esac
@@ -201,24 +201,23 @@ main() {
     
     echo ""
     echo "=================================="
-    echo "✅ 安装完成！"
+    echo "✅ Installation Complete!"
     echo "=================================="
     echo ""
-    echo "下一步操作:"
-    echo "1. 配置路由器端口转发 (将外部22端口转发到 $LOCAL_IP:22)"
-    echo "2. 从远程位置测试连接: ssh $CURRENT_USER@$PUBLIC_IP"
-    echo "3. 连接成功后，运行 ~/add-ssh-key.sh 添加你的公钥"
-    echo "4. 添加公钥后，可以禁用密码登录提高安全性"
+    echo "Next steps:"
+    echo "1. Configure router port forwarding (forward external port 22 to $LOCAL_IP:22)"
+    echo "2. Test connection from remote location: ssh $CURRENT_USER@$PUBLIC_IP"
+    echo "3. After successful connection, run ~/add-ssh-key.sh to add your public key"
+    echo "4. After adding key, you can disable password login for better security"
     echo ""
-    echo "提示: 配置文件备份在 /etc/ssh/sshd_config.backup.*"
+    echo "Tip: Configuration backup at /etc/ssh/sshd_config.backup.*"
 }
 
-# 检查是否为root或有sudo权限
+# Check for root or sudo privileges
 if ! sudo -v; then
-    echo "❌ 需要 sudo 权限才能安装"
+    echo "❌ Sudo privileges required"
     exit 1
 fi
 
 main
-
 

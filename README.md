@@ -61,19 +61,31 @@ Then configure router port forwarding (22 → your PC IP)
 
 ## Files
 
-### English Documentation
-- `START_HERE.md` - Quick start guide
+### Documentation
+- `START_HERE.md` - Quick start guide ⭐ **Start here!**
 - `ANTIVIRUS_SOLUTION.md` - How to handle antivirus blocking
 
-### Scripts (English versions with -en suffix)
-- `setup-ssh-server-en.sh` - Mac/Linux automated setup
-- `setup-ssh-windows-safe-en.ps1` - Windows safe setup  
-- `setup-tailscale-ssh-en.sh` - Tailscale automated setup
+### Scripts
+- `setup-ssh-server.sh` - Mac/Linux automated setup
+- `setup-ssh-windows-safe.ps1` - Windows safe setup  
+- `setup-tailscale-ssh.sh` - Tailscale automated setup
 
-### Chinese Documentation (中文文档)
-- `START_HERE_开始阅读.md` - 中文快速指南
-- `解决杀毒软件拦截的完整方案.md` - 杀毒软件解决方案
-- Original Chinese scripts: `setup-ssh-server.sh`, `setup-ssh-server.ps1`, etc.
+### One-Line Install Commands
+
+**Linux/Mac:**
+```bash
+curl -fsSL https://raw.githubusercontent.com/TT1nKer/remoteShell/main/setup-ssh-server.sh | bash
+```
+
+**Windows (PowerShell as Admin):**
+```powershell
+irm https://raw.githubusercontent.com/TT1nKer/remoteShell/main/setup-ssh-windows-safe.ps1 | iex
+```
+
+**Tailscale (Linux/Mac):**
+```bash
+curl -fsSL https://raw.githubusercontent.com/TT1nKer/remoteShell/main/setup-tailscale-ssh.sh | bash
+```
 
 ---
 
