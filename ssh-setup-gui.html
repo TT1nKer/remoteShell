@@ -316,7 +316,7 @@
                     启用 SSH
                 </div>
                 <div class="step-content">
-                    <p><strong>Windows:</strong></p>
+                    <p><strong>Windows（需要 Windows 10 1809+ 或 Windows 11）:</strong></p>
                     <ul>
                         <li>打开 <code>设置</code> → <code>应用</code> → <code>可选功能</code></li>
                         <li>添加功能 → 搜索 <code>OpenSSH Server</code> → 安装</li>
@@ -324,9 +324,46 @@
                         <li>找到 <code>OpenSSH SSH Server</code>，启动并设为自动</li>
                     </ul>
                     
+                    <div class="warning-box">
+                        <strong>⚠️ 找不到 OpenSSH Server？</strong><br>
+                        如果"可选功能"中没有 OpenSSH Server：
+                        <ul>
+                            <li><strong>方法1：</strong> 通过 PowerShell 安装（以管理员身份运行）：
+                                <div class="command-box">
+Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
+                                </div>
+                            </li>
+                            <li><strong>方法2：</strong> 使用我们的自动化脚本（见上方"自动脚本"选项卡）</li>
+                            <li><strong>方法3：</strong> 旧版 Windows，从 <a href="https://github.com/PowerShell/Win32-OpenSSH/releases" target="_blank">GitHub</a> 下载</li>
+                        </ul>
+                    </div>
+                    
                     <p><strong>macOS:</strong></p>
+                    <p><em>方法1 - 通过系统设置（推荐）：</em></p>
+                    <ul>
+                        <li>打开 <code>系统设置</code>（或旧版的系统偏好设置）</li>
+                        <li>进入 <code>通用</code> → <code>共享</code></li>
+                        <li>开启 <code>远程登录</code></li>
+                    </ul>
+                    
+                    <p><em>方法2 - 通过终端（如果有完全磁盘访问权限）：</em></p>
                     <div class="command-box">
 sudo systemsetup -setremotelogin on
+                    </div>
+                    
+                    <div class="warning-box">
+                        <strong>⚠️ 完全磁盘访问权限错误？</strong><br>
+                        如果看到"requires Full Disk Access privileges"：
+                        <ul>
+                            <li>使用方法1（系统设置）- 更简单！</li>
+                            <li>或授予终端完全磁盘访问权限：
+                                <ul>
+                                    <li>系统设置 → 隐私与安全性 → 完全磁盘访问权限</li>
+                                    <li>点击 + 按钮添加终端</li>
+                                    <li>重启终端后重试</li>
+                                </ul>
+                            </li>
+                        </ul>
                     </div>
                     
                     <p><strong>Linux:</strong></p>
@@ -343,12 +380,8 @@ sudo systemctl enable ssh --now
                     获取 Tailscale IP
                 </div>
                 <div class="step-content">
-                    <p>在家里电脑运行：</p>
+                    <p>在家里电脑运行（所有系统命令相同）：</p>
                     <div class="command-box">
-# Windows (PowerShell)
-tailscale ip -4
-
-# Mac/Linux
 tailscale ip -4
                     </div>
                     <p>会显示类似 <code>100.x.x.x</code> 的IP地址</p>
@@ -398,6 +431,7 @@ ssh 你的用户名@100.x.x.x
                     安装 SSH 服务器（Windows）
                 </div>
                 <div class="step-content">
+                    <p><strong>选项A：通过设置（Windows 10 1809+ 或 Windows 11）</strong></p>
                     <ul>
                         <li>按 <code>Win + I</code> 打开设置</li>
                         <li>进入 <code>应用</code> → <code>可选功能</code></li>
@@ -406,6 +440,21 @@ ssh 你的用户名@100.x.x.x
                         <li>勾选并点击 <code>安装</code></li>
                         <li>等待安装完成（约1-2分钟）</li>
                     </ul>
+                    
+                    <p><strong>选项B：通过 PowerShell（如果找不到 OpenSSH Server）</strong></p>
+                    <ul>
+                        <li>右键开始菜单 → <code>Windows PowerShell（管理员）</code></li>
+                        <li>运行此命令：</li>
+                    </ul>
+                    <div class="command-box">
+Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
+Start-Service sshd
+Set-Service -Name sshd -StartupType 'Automatic'
+                    </div>
+                    
+                    <div class="info-box">
+                        <strong>💡 Windows 7/8/8.1 用户：</strong> 不官方支持 OpenSSH Server。建议升级到 Windows 10/11，或使用第三方 SSH 服务器如 <a href="https://www.bitvise.com/ssh-server" target="_blank">Bitvise SSH Server</a> 或 <a href="https://www.freesshd.com/" target="_blank">freeSSHd</a>。
+                    </div>
                 </div>
             </div>
             
@@ -624,12 +673,15 @@ sudo ./setup-ssh-server.sh
         // 复制命令
         document.querySelectorAll('.command-box').forEach(box => {
             box.style.position = 'relative';
+            // 在添加按钮前保存原始文本
+            const originalText = box.textContent.trim();
+            
             const btn = document.createElement('button');
             btn.className = 'copy-btn';
             btn.textContent = '复制';
             btn.onclick = function() {
-                const text = box.textContent.trim();
-                navigator.clipboard.writeText(text).then(() => {
+                // 只复制原始文本，不包括按钮
+                navigator.clipboard.writeText(originalText).then(() => {
                     btn.textContent = '已复制！';
                     setTimeout(() => btn.textContent = '复制', 2000);
                 });
@@ -640,9 +692,9 @@ sudo ./setup-ssh-server.sh
         // 下载脚本
         function downloadScript(type) {
             if (type === 'windows') {
-                window.open('https://raw.githubusercontent.com/TT1nKer/remoteShell/main/setup-ssh-windows-safe.ps1', '_blank');
+                window.open('https://raw.githubusercontent.com/TT1nKer/remoteShell/cn/setup-ssh-windows-safe.ps1', '_blank');
             } else {
-                window.open('https://raw.githubusercontent.com/TT1nKer/remoteShell/main/setup-ssh-server.sh', '_blank');
+                window.open('https://raw.githubusercontent.com/TT1nKer/remoteShell/cn/setup-ssh-server.sh', '_blank');
             }
         }
     </script>

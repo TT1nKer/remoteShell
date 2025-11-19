@@ -23,16 +23,29 @@
 3. 用 Google/GitHub 账号登录
 4. 启用SSH服务：
 
-**Windows:**
+**Windows（需要 Windows 10 1809+ 或 Windows 11）:**
 ```
 设置 → 应用 → 可选功能 → OpenSSH Server → 安装
 Win+R → services.msc → OpenSSH SSH Server → 启动 → 自动
 ```
 
-**Mac:**
+**如果找不到 OpenSSH Server，用 PowerShell（以管理员运行）:**
+```powershell
+Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
+Start-Service sshd
+Set-Service -Name sshd -StartupType 'Automatic'
+```
+
+**Mac（最简单 - 通过图形界面）:**
+```
+系统设置 → 通用 → 共享 → 开启"远程登录"
+```
+
+**Mac（备选 - 通过终端）:**
 ```bash
 sudo systemsetup -setremotelogin on
 ```
+*注意：需要终端有完全磁盘访问权限。如果报错，用上面的图形界面方法。*
 
 **Linux:**
 ```bash
@@ -51,10 +64,17 @@ ssh 用户名@100.x.x.x
 
 ## 备选方案：手动安装SSH（免费但需配置路由器）
 
-**Windows：**
+**Windows（方法1 - 通过设置）:**
 1. Win+I → 应用 → 可选功能 → OpenSSH Server → 安装
 2. Win+R → services.msc → OpenSSH SSH Server → 启动 → 自动
 3. 配置路由器端口转发（端口22 → 你的电脑IP）
+
+**Windows（方法2 - 如果找不到，用 PowerShell 管理员）:**
+```powershell
+Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
+Start-Service sshd
+Set-Service -Name sshd -StartupType 'Automatic'
+```
 
 **Mac/Linux：**
 - 见上面命令

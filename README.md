@@ -8,16 +8,24 @@
 2. 登录（用 Google/GitHub 账号）
 3. 启用SSH:
 
-**Windows:**
+**Windows（10 1809+/11）:**
 ```
 设置 → 应用 → 可选功能 → OpenSSH Server → 安装
 services.msc → OpenSSH SSH Server → 启动
 ```
 
+**Windows（PowerShell 备选）:**
+```powershell
+Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
+```
+
 **Mac:**
 ```bash
+# 通过图形界面（推荐）：系统设置 → 共享 → 远程登录 开启
+# 或通过终端：
 sudo systemsetup -setremotelogin on
 ```
+*注意：终端方法需要完全磁盘访问权限*
 
 **Linux:**
 ```bash
