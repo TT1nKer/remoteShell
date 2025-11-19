@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSH 服务器配置向导</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            width: 100%;
+            padding: 40px;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        
+        .method-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .method-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .method-card:hover {
+            border-color: #667eea;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.2);
+        }
+        
+        .method-card.active {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+        
+        .method-card .icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        
+        .method-card .title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .method-card .desc {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .content-section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .content-section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .step {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+        
+        .step-number {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        .step-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .step-content {
+            color: #555;
+            line-height: 1.8;
+        }
+        
+        .command-box {
+            background: #2d2d2d;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: "Courier New", monospace;
+            font-size: 14px;
+            margin: 10px 0;
+            position: relative;
+            overflow-x: auto;
+        }
+        
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .copy-btn:hover {
+            background: #5568d3;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+        }
+        
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+        }
+        
+        .info-box {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .download-section {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .download-btn {
+            display: inline-block;
+            background: #28a745;
+            color: white;
+            padding: 15px 40px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .download-btn:hover {
+            background: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        }
+        
+        ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+            color: #555;
+        }
+        
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: "Courier New", monospace;
+            color: #e83e8c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 SSH 远程访问配置向导</h1>
+        <p class="subtitle">轻松配置，随时随地访问你的家庭电脑</p>
+        
+        <div class="method-selector">
+            <div class="method-card active" data-method="tailscale">
+                <div class="icon">🎯</div>
+                <div class="title">Tailscale</div>
+                <div class="desc">最简单 · 零配置 · 推荐</div>
+            </div>
+            <div class="method-card" data-method="manual">
+                <div class="icon">👆</div>
+                <div class="title">手动安装</div>
+                <div class="desc">最安全 · 不用脚本</div>
+            </div>
+            <div class="method-card" data-method="script">
+                <div class="icon">⚡</div>
+                <div class="title">自动脚本</div>
+                <div class="desc">快速 · 自动化</div>
+            </div>
+        </div>
+        
+        <!-- Tailscale 方案 -->
+        <div id="tailscale-content" class="content-section active">
+            <div class="success-box">
+                <strong>🎉 最佳选择！</strong> 完全不需要配置路由器，不需要公网IP，不会被杀毒软件拦截
+            </div>
+            
+            <div class="step">
+                <div class="step-title">
+                    <span class="step-number">1</span>
+                    下载 Tailscale
+                </div>
+                <div class="step-content">
+                    <p>选择你的操作系统：</p>
+                    <div class="download-section">
+                        <a href="https://tailscale.com/download/windows" class="download-btn" target="_blank">
+                            💻 Windows 版下载
+                        </a>
+                        <a href="https://tailscale.com/download/mac" class="download-btn" target="_blank">
+                            🍎 macOS 版下载
+                        </a>
+                        <a href="https://tailscale.com/download/linux" class="download-btn" target="_blank">
+                            🐧 Linux 版下载
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-title">
+                    <span class="step-number">2</span>
+                    安装并登录
+                </div>
+                <div class="step-content">
+                    <ul>
+                        <li>运行下载的安装包</li>
+                        <li>会自动打开浏览器</li>
+                        <li>使用 Google / GitHub / Microsoft 账号登录（完全免费）</li>
+                        <li>授权完成后，Tailscale 会在后台运行</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-title">
+                    <span class="step-number">3</span>
+                    启用 SSH
+                </div>
+                <div class="step-content">
+                    <p><strong>Windows:</strong></p>
+                    <ul>
+                        <li>打开 <code>设置</code> → <code>应用</code> → <code>可选功能</code></li>
+                        <li>添加功能 → 搜索 <code>OpenSSH Server</code> → 安装</li>
+                        <li>按 <code>Win+R</code>，输入 <code>services.msc</code></li>
+                        <li>找到 <code>OpenSSH SSH Server</code>，启动并设为自动</li>
+                    </ul>
+                    
+                    <p><strong>macOS:</strong></p>
+                    <div class="command-box">
+sudo systemsetup -setremotelogin on
+                    </div>
+                    
+                    <p><strong>Linux:</strong></p>
+                    <div class="command-box">
+sudo apt install openssh-server
+sudo systemctl enable ssh --now
+                    </div>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-title">
+                    <span class="step-number">4</span>
+                    获取 Tailscale IP
+                </div>
+                <div class="step-content">
+                    <p>在家里电脑运行：</p>
+                    <div class="command-box">
+# Windows (PowerShell)
+tailscale ip -4
+
+# Mac/Linux
+tailscale ip -4
+                    </div>
+                    <p>会显示类似 <code>100.x.x.x</code> 的IP地址</p>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-title">
+                    <span class="step-number">5</span>
+                    在其他设备连接
+                </div>
+                <div class="step-content">
+                    <ul>
+                        <li>在你的另一台电脑/手机也安装 Tailscale</li>
+                        <li>使用<strong>相同账号</strong>登录</li>
+                        <li>打开终端/SSH客户端，输入：</li>
+                    </ul>
+                    <div class="command-box">
+ssh 你的用户名@100.x.x.x
+                    </div>
+                    <div class="success-box">
+                        <strong>✅ 成功！</strong> 现在你可以从任何地方安全访问家里电脑了
+                    </div>
+                </div>
+            </div>
+            
+            <div class="info-box">
+                <strong>💡 提示：</strong>
+                <ul>
+                    <li>Tailscale 是点对点加密连接，非常安全</li>
+                    <li>完全不需要配置路由器</li>
+                    <li>即使你的电脑在公司/学校网络也能用</li>
+                    <li>手机 App Store / Google Play 搜索 "Tailscale"</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- 手动安装方案 -->
+        <div id="manual-content" class="content-section">
+            <div class="info-box">
+                <strong>🛡️ 最安全的方式</strong> - 使用系统自带功能，完全不会被杀毒软件拦截
+            </div>
+            
+            <div class="step">
+                <div class="step-title">
+                    <span class="step-number">1</span>
+                    安装 SSH 服务器（Windows）
+                </div>
+                <div class="step-content">
+                    <ul>
+                        <li>按 <code>Win + I</code> 打开设置</li>
+                        <li>进入 <code>应用</code> → <code>可选功能</code></li>
+                        <li>点击 <code>查看功能</code></li>
+                        <li>搜索 <code>OpenSSH Server</code></li>
+                        <li>勾选并点击 <code>安装</code></li>
+                        <li>等待安装完成（约1-2分钟）</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-title">
+                    <span class="step-number">2</span>
+                    启动 SSH 服务
+                </div>
+                <div class="step-content">
+                    <ul>
+                        <li>按 <code>Win + R</code>，输入 <code>services.msc</code>，回车</li>
+                        <li>找到 <code>OpenSSH SSH Server</code></li>
+                        <li>双击打开属性</li>
+                        <li>启动类型改为 <code>自动</code></li>
+                        <li>点击 <code>启动</code> 按钮</li>
+                        <li>点击 <code>确定</code></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-title">
+                    <span class="step-number">3</span>
+                    配置防火墙
+                </div>
+                <div class="step-content">
+                    <ul>
+                        <li>按 <code>Win + R</code>，输入 <code>firewall.cpl</code>，回车</li>
+                        <li>点击左侧 <code>高级设置</code></li>
+                        <li>点击 <code>入站规则</code> → <code>新建规则</code></li>
+                        <li>选择 <code>端口</code> → 下一步</li>
+                        <li>选择 <code>TCP</code>，特定本地端口输入 <code>22</code> → 下一步</li>
+                        <li>选择 <code>允许连接</code> → 下一步</li>
+                        <li>全部勾选 → 下一步</li>
+                        <li>名称填 <code>SSH</code> → 完成</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-title">
+                    <span class="step-number">4</span>
+                    查看 IP 地址
+                </div>
+                <div class="step-content">
+                    <ul>
+                        <li>按 <code>Win + R</code>，输入 <code>cmd</code>，回车</li>
+                        <li>输入命令：</li>
+                    </ul>
+                    <div class="command-box">
+ipconfig
+                    </div>
+                    <p>找到 <code>IPv4 地址</code>，记下来（例如：192.168.1.100）</p>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-title">
+                    <span class="step-number">5</span>
+                    配置路由器（可选，远程访问需要）
+                </div>
+                <div class="step-content">
+                    <ul>
+                        <li>浏览器打开路由器管理页面（通常是 192.168.1.1 或 192.168.0.1）</li>
+                        <li>找到 <code>端口转发</code> / <code>虚拟服务器</code> 设置</li>
+                        <li>添加规则：
+                            <ul>
+                                <li>外部端口：22</li>
+                                <li>内部 IP：你电脑的IP（如 192.168.1.100）</li>
+                                <li>内部端口：22</li>
+                                <li>协议：TCP</li>
+                            </ul>
+                        </li>
+                        <li>保存设置</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="success-box">
+                <strong>✅ 完成！</strong> 现在可以通过 SSH 连接了
+                <div class="command-box">
+# 局域网内连接
+ssh 你的用户名@192.168.1.100
+
+# 远程连接（需要配置路由器）
+ssh 你的用户名@你的公网IP
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <strong>⚠️ 注意：</strong> 手动安装方案只适合局域网使用，或者你已经配置好路由器端口转发。如果需要从外网访问但不想配置路由器，请使用 Tailscale 方案。
+            </div>
+        </div>
+        
+        <!-- 自动脚本方案 -->
+        <div id="script-content" class="content-section">
+            <div class="warning-box">
+                <strong>⚠️ 杀毒软件可能拦截</strong> - 如果被拦截，请参考下面的解决方法
+            </div>
+            
+            <div class="step">
+                <div class="step-title">
+                    <span class="step-number">1</span>
+                    下载脚本
+                </div>
+                <div class="step-content">
+                    <p>选择你的系统：</p>
+                    <div class="download-section">
+                        <button class="download-btn" onclick="downloadScript('windows')">
+                            💻 Windows 脚本
+                        </button>
+                        <button class="download-btn" onclick="downloadScript('linux')">
+                            🐧 Linux/Mac 脚本
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-title">
+                    <span class="step-number">2</span>
+                    处理杀毒软件（如果需要）
+                </div>
+                <div class="step-content">
+                    <p><strong>如果脚本被删除或阻止运行：</strong></p>
+                    
+                    <p><strong>Windows Defender:</strong></p>
+                    <ul>
+                        <li>右键点击脚本文件 → 属性 → 勾选 "解除锁定" → 确定</li>
+                        <li>或者：设置 → 病毒和威胁防护 → 排除项 → 添加脚本文件</li>
+                    </ul>
+                    
+                    <p><strong>360 安全卫士:</strong></p>
+                    <ul>
+                        <li>木马防火墙 → 信任区 → 添加文件</li>
+                    </ul>
+                    
+                    <p><strong>火绒:</strong></p>
+                    <ul>
+                        <li>设置 → 信任区 → 添加文件</li>
+                    </ul>
+                    
+                    <div class="info-box">
+                        <strong>💡 为什么会被拦截？</strong><br>
+                        杀毒软件对修改系统配置的脚本比较敏感。我们的脚本只是安装 Windows 官方组件，完全安全。你可以用记事本打开查看代码。
+                    </div>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-title">
+                    <span class="step-number">3</span>
+                    运行脚本
+                </div>
+                <div class="step-content">
+                    <p><strong>Windows:</strong></p>
+                    <ul>
+                        <li>右键点击脚本文件 <code>setup-ssh-windows-safe.ps1</code></li>
+                        <li>选择 <code>以管理员身份运行 PowerShell</code></li>
+                        <li>如果提示执行策略，输入：</li>
+                    </ul>
+                    <div class="command-box">
+Set-ExecutionPolicy Bypass -Scope Process -Force
+.\setup-ssh-windows-safe.ps1
+                    </div>
+                    
+                    <p><strong>Linux/Mac:</strong></p>
+                    <div class="command-box">
+chmod +x setup-ssh-server.sh
+sudo ./setup-ssh-server.sh
+                    </div>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-title">
+                    <span class="step-number">4</span>
+                    跟随提示完成配置
+                </div>
+                <div class="step-content">
+                    <p>脚本会自动：</p>
+                    <ul>
+                        <li>✅ 安装 SSH 服务器</li>
+                        <li>✅ 配置防火墙</li>
+                        <li>✅ 启动服务</li>
+                        <li>✅ 显示连接信息</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="success-box">
+                <strong>✅ 完成！</strong> 脚本会在桌面生成一个文本文件，包含连接信息
+            </div>
+            
+            <div class="info-box">
+                <strong>💡 实在不行？</strong> 如果脚本无法运行，建议使用 <strong>手动安装</strong> 或 <strong>Tailscale</strong> 方案
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 切换方案
+        document.querySelectorAll('.method-card').forEach(card => {
+            card.addEventListener('click', function() {
+                // 移除所有激活状态
+                document.querySelectorAll('.method-card').forEach(c => c.classList.remove('active'));
+                document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+                
+                // 激活当前选择
+                this.classList.add('active');
+                const method = this.dataset.method;
+                document.getElementById(method + '-content').classList.add('active');
+            });
+        });
+        
+        // 复制命令
+        document.querySelectorAll('.command-box').forEach(box => {
+            box.style.position = 'relative';
+            const btn = document.createElement('button');
+            btn.className = 'copy-btn';
+            btn.textContent = '复制';
+            btn.onclick = function() {
+                const text = box.textContent.trim();
+                navigator.clipboard.writeText(text).then(() => {
+                    btn.textContent = '已复制！';
+                    setTimeout(() => btn.textContent = '复制', 2000);
+                });
+            };
+            box.appendChild(btn);
+        });
+        
+        // 下载脚本
+        function downloadScript(type) {
+            if (type === 'windows') {
+                alert('请从 GitHub 仓库下载 setup-ssh-windows-safe.ps1 文件');
+                window.open('https://github.com/你的用户名/你的仓库', '_blank');
+            } else {
+                alert('请从 GitHub 仓库下载 setup-ssh-server.sh 文件');
+                window.open('https://github.com/你的用户名/你的仓库', '_blank');
+            }
+        }
+    </script>
+</body>
+</html>
+
+
