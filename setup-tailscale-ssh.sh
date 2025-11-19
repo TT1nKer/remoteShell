@@ -47,7 +47,13 @@ install_ssh() {
     
     case "$OS" in
         macos)
-            sudo systemsetup -setremotelogin on
+            if sudo systemsetup -setremotelogin on 2>/dev/null; then
+                echo "   ✅ Enabled via systemsetup"
+            else
+                echo "   ⚠️  Please enable manually:"
+                echo "   System Settings → Sharing → Remote Login ON"
+                read -p "   Press Enter after enabling..."
+            fi
             ;;
         ubuntu|debian)
             export DEBIAN_FRONTEND=noninteractive

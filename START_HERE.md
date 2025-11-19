@@ -36,10 +36,16 @@ Start-Service sshd
 Set-Service -Name sshd -StartupType 'Automatic'
 ```
 
-**Mac:**
+**Mac (Easiest - via GUI):**
+```
+System Settings → General → Sharing → Toggle "Remote Login" ON
+```
+
+**Mac (Alternative - via Terminal):**
 ```bash
 sudo systemsetup -setremotelogin on
 ```
+*Note: Requires Full Disk Access for Terminal. If error, use GUI method above.*
 
 **Linux:**
 ```bash

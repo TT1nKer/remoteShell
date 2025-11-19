@@ -21,8 +21,11 @@ Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
 
 **Mac:**
 ```bash
+# Via GUI (Recommended): System Settings → Sharing → Remote Login ON
+# Or via Terminal:
 sudo systemsetup -setremotelogin on
 ```
+*Note: Terminal method requires Full Disk Access permission*
 
 **Linux:**
 ```bash

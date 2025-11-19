@@ -34,13 +34,28 @@ echo "Current user: $CURRENT_USER"
 install_macos() {
     echo "📦 Configuring macOS SSH server..."
     
-    # Enable remote login
-    sudo systemsetup -setremotelogin on
+    # Try to enable remote login
+    if sudo systemsetup -setremotelogin on 2>/dev/null; then
+        echo "✅ Remote login enabled via systemsetup"
+    else
+        echo "⚠️  systemsetup requires Full Disk Access"
+        echo ""
+        echo "Please enable SSH manually:"
+        echo "  1. Open System Settings (or System Preferences)"
+        echo "  2. Go to General → Sharing (or just Sharing)"
+        echo "  3. Toggle ON 'Remote Login'"
+        echo ""
+        echo "Alternatively, grant Terminal Full Disk Access:"
+        echo "  System Settings → Privacy & Security → Full Disk Access"
+        echo "  → Add Terminal → Restart Terminal"
+        echo ""
+        read -p "Press Enter after enabling Remote Login manually..."
+    fi
     
     # Ensure sshd service is running
     sudo launchctl load -w /System/Library/LaunchDaemons/ssh.plist 2>/dev/null || true
     
-    echo "✅ macOS SSH server enabled"
+    echo "✅ macOS SSH server ready"
 }
 
 # Linux (Ubuntu/Debian) installation

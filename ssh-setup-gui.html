@@ -339,8 +339,31 @@ Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
                     </div>
                     
                     <p><strong>macOS:</strong></p>
+                    <p><em>Method 1 - Via System Settings (Recommended):</em></p>
+                    <ul>
+                        <li>Open <code>System Settings</code> (or System Preferences on older macOS)</li>
+                        <li>Go to <code>General</code> → <code>Sharing</code></li>
+                        <li>Toggle on <code>Remote Login</code></li>
+                    </ul>
+                    
+                    <p><em>Method 2 - Via Terminal (if you have Full Disk Access):</em></p>
                     <div class="command-box">
 sudo systemsetup -setremotelogin on
+                    </div>
+                    
+                    <div class="warning-box">
+                        <strong>⚠️ Full Disk Access Error?</strong><br>
+                        If you see "requires Full Disk Access privileges":
+                        <ul>
+                            <li>Use Method 1 (System Settings) instead - it's easier!</li>
+                            <li>Or grant Terminal Full Disk Access:
+                                <ul>
+                                    <li>System Settings → Privacy & Security → Full Disk Access</li>
+                                    <li>Click the + button and add Terminal</li>
+                                    <li>Restart Terminal and try again</li>
+                                </ul>
+                            </li>
+                        </ul>
                     </div>
                     
                     <p><strong>Linux:</strong></p>
@@ -649,12 +672,15 @@ sudo ./setup-ssh-server.sh
         // Copy command
         document.querySelectorAll('.command-box').forEach(box => {
             box.style.position = 'relative';
+            // Store original text before adding button
+            const originalText = box.textContent.trim();
+            
             const btn = document.createElement('button');
             btn.className = 'copy-btn';
             btn.textContent = 'Copy';
             btn.onclick = function() {
-                const text = box.textContent.trim();
-                navigator.clipboard.writeText(text).then(() => {
+                // Copy the original text, not including the button
+                navigator.clipboard.writeText(originalText).then(() => {
                     btn.textContent = 'Copied!';
                     setTimeout(() => btn.textContent = 'Copy', 2000);
                 });
