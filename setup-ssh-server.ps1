@@ -1,6 +1,6 @@
 # Windows SSH服务器自动化安装脚本
 # 使用方法: 以管理员身份运行 PowerShell，然后执行:
-# irm https://your-url/setup-ssh-server.ps1 | iex
+# irm https://raw.githubusercontent.com/TT1nKer/remoteShell/main/setup-ssh-server.ps1 | iex
 # 或者: .\setup-ssh-server.ps1
 
 #Requires -RunAsAdministrator

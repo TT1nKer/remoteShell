@@ -25,7 +25,7 @@
 
 **Mac/Linux:**
 ```bash
-curl -fsSL https://raw.githubusercontent.com/你的仓库/main/setup-tailscale-ssh.sh | bash
+curl -fsSL https://raw.githubusercontent.com/TT1nKer/remoteShell/main/setup-tailscale-ssh.sh | bash
 ```
 
 **或者下载后运行:**

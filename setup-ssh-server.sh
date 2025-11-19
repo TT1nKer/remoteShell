@@ -1,6 +1,6 @@
 #!/bin/bash
 # SSH服务器自动化安装和配置脚本
-# 使用方法: curl -fsSL https://your-url/setup-ssh-server.sh | bash
+# 使用方法: curl -fsSL https://raw.githubusercontent.com/TT1nKer/remoteShell/main/setup-ssh-server.sh | bash
 # 或者: bash setup-ssh-server.sh
 
 set -e

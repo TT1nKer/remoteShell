@@ -8,7 +8,7 @@
 
 #### macOS/Linux:
 ```bash
-curl -fsSL https://raw.githubusercontent.com/你的用户名/你的仓库/main/setup-ssh-server.sh | sudo bash
+curl -fsSL https://raw.githubusercontent.com/TT1nKer/remoteShell/main/setup-ssh-server.sh | sudo bash
 ```
 
 或者下载后运行：
@@ -20,7 +20,7 @@ sudo ./setup-ssh-server.sh
 #### Windows:
 以管理员身份打开 PowerShell，执行：
 ```powershell
-irm https://raw.githubusercontent.com/你的用户名/你的仓库/main/setup-ssh-server.ps1 | iex
+irm https://raw.githubusercontent.com/TT1nKer/remoteShell/main/setup-ssh-server.ps1 | iex
 ```
 
 或者下载后运行：
@@ -187,7 +187,7 @@ A: 可以！使用 Termius (iOS/Android) 等SSH客户端。
 
 1. **昨晚你在家里做的准备（5分钟）：**
    ```bash
-   curl -fsSL https://example.com/setup.sh | sudo bash
+   curl -fsSL https://raw.githubusercontent.com/TT1nKer/remoteShell/main/setup-ssh-server.sh | sudo bash
    # 配置了路由器端口转发
    # 记下了公网IP: 123.45.67.89
    ```
