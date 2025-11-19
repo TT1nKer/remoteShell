@@ -1,28 +1,28 @@
 #!/bin/bash
-# Easiest Solution: Tailscale + SSH Full Auto Configuration
-# No router config needed, no public IP required, complete P2P encrypted connection
-# Usage: curl -fsSL https://raw.githubusercontent.com/TT1nKer/remoteShell/main/setup-tailscale-ssh.sh | bash
-# Or: bash setup-tailscale-ssh.sh
+# 最简单的方案：Tailscale + SSH 全自动配置
+# 无需配置路由器，无需公网IP，完全P2P加密连接
+# 使用方法: curl -fsSL https://raw.githubusercontent.com/TT1nKer/remoteShell/cn/setup-tailscale-ssh.sh | bash
+# 或者: bash setup-tailscale-ssh.sh
 
 set -e
 
 echo "=========================================="
-echo "🚀 Tailscale + SSH Auto Setup Script"
+echo "🚀 Tailscale + SSH 自动配置脚本"
 echo "=========================================="
-echo "This script will:"
-echo "  1. Install and configure SSH server"
-echo "  2. Install Tailscale (zero-config VPN)"
-echo "  3. Automatically configure secure connection"
+echo "此脚本将："
+echo "  1. 安装并配置 SSH 服务器"
+echo "  2. 安装 Tailscale (零配置VPN)"
+echo "  3. 自动配置安全连接"
 echo ""
-echo "Advantages:"
-echo "  ✓ No router configuration needed"
-echo "  ✓ No public IP required"
-echo "  ✓ Point-to-point encryption"
-echo "  ✓ Automatic NAT traversal"
+echo "优势："
+echo "  ✓ 无需配置路由器"
+echo "  ✓ 无需公网IP"
+echo "  ✓ 点对点加密"
+echo "  ✓ 自动穿透NAT"
 echo "=========================================="
 echo ""
 
-# Detect operating system
+# 检测操作系统
 detect_os() {
     if [[ "$OSTYPE" == "darwin"* ]]; then
         echo "macos"
@@ -37,13 +37,13 @@ detect_os() {
 OS=$(detect_os)
 CURRENT_USER=$(whoami)
 
-echo "Operating System: $OS"
-echo "Current User: $CURRENT_USER"
+echo "操作系统: $OS"
+echo "当前用户: $CURRENT_USER"
 echo ""
 
-# Install SSH server
+# 安装SSH服务器
 install_ssh() {
-    echo "📦 [1/3] Configuring SSH server..."
+    echo "📦 [1/3] 配置 SSH 服务器..."
     
     case "$OS" in
         macos)
@@ -61,16 +61,16 @@ install_ssh() {
             ;;
     esac
     
-    echo "   ✅ SSH server ready"
+    echo "   ✅ SSH 服务器已就绪"
 }
 
-# Install Tailscale
+# 安装 Tailscale
 install_tailscale() {
     echo ""
-    echo "📦 [2/3] Installing Tailscale..."
+    echo "📦 [2/3] 安装 Tailscale..."
     
     if command -v tailscale &> /dev/null; then
-        echo "   ✅ Tailscale already installed"
+        echo "   ✅ Tailscale 已安装"
         return
     fi
     
@@ -79,9 +79,9 @@ install_tailscale() {
             if command -v brew &> /dev/null; then
                 brew install tailscale
             else
-                echo "   ⚠️  Please install Tailscale manually: https://tailscale.com/download/mac"
+                echo "   ⚠️  请手动安装 Tailscale: https://tailscale.com/download/mac"
                 open "https://tailscale.com/download/mac"
-                read -p "   Press Enter after installation..."
+                read -p "   安装完成后按回车继续..."
             fi
             ;;
         ubuntu|debian)
@@ -92,96 +92,96 @@ install_tailscale() {
             ;;
     esac
     
-    echo "   ✅ Tailscale installation complete"
+    echo "   ✅ Tailscale 安装完成"
 }
 
-# Start Tailscale
+# 启动 Tailscale
 start_tailscale() {
     echo ""
-    echo "🔗 [3/3] Starting Tailscale..."
+    echo "🔗 [3/3] 启动 Tailscale..."
     echo ""
-    echo "⚠️  Important: Browser will open for account authorization"
-    echo "   - If you don't have an account, login with Google/GitHub/Microsoft"
-    echo "   - Completely free, no credit card required"
+    echo "⚠️  重要：即将打开浏览器进行账号授权"
+    echo "   - 如果没有账号，请用 Google/GitHub/Microsoft 账号登录"
+    echo "   - 完全免费，无需信用卡"
     echo ""
-    read -p "Press Enter to continue..."
+    read -p "按回车继续..."
     
-    # Start Tailscale and auto-open browser for authorization
+    # 启动 Tailscale 并自动打开浏览器授权
     sudo tailscale up
     
     echo ""
-    echo "   ✅ Tailscale connected"
+    echo "   ✅ Tailscale 已连接"
 }
 
-# Show connection info
+# 获取连接信息
 show_connection_info() {
     echo ""
     echo "=========================================="
-    echo "🎉 Setup Complete!"
+    echo "🎉 配置完成！"
     echo "=========================================="
     echo ""
     
-    # Get Tailscale IP
-    TAILSCALE_IP=$(tailscale ip -4 2>/dev/null || echo "not found")
+    # 获取 Tailscale IP
+    TAILSCALE_IP=$(tailscale ip -4 2>/dev/null || echo "未找到")
     
-    if [[ "$TAILSCALE_IP" != "not found" ]]; then
-        echo "✅ Your Tailscale IP: $TAILSCALE_IP"
+    if [[ "$TAILSCALE_IP" != "未找到" ]]; then
+        echo "✅ 你的 Tailscale IP: $TAILSCALE_IP"
         echo ""
-        echo "📝 Connect to this computer from anywhere:"
+        echo "📝 从任何地方连接此电脑："
         echo ""
-        echo "   1️⃣  Install Tailscale on your other computer/phone"
-        echo "       Download: https://tailscale.com/download"
+        echo "   1️⃣  在你的另一台电脑/手机上安装 Tailscale"
+        echo "       下载地址: https://tailscale.com/download"
         echo ""
-        echo "   2️⃣  Login with the same account"
+        echo "   2️⃣  使用相同账号登录 Tailscale"
         echo ""
-        echo "   3️⃣  SSH connection command:"
+        echo "   3️⃣  SSH 连接命令："
         echo "       ssh $CURRENT_USER@$TAILSCALE_IP"
         echo ""
         echo "=========================================="
-        echo "🔐 Security Info"
+        echo "🔐 安全提示"
         echo "=========================================="
-        echo "• Tailscale uses WireGuard protocol for end-to-end encryption"
-        echo "• Traffic doesn't go through any intermediate servers (peer-to-peer)"
-        echo "• Only your devices can see this IP"
-        echo "• First connection requires this computer's login password"
+        echo "• Tailscale 使用 WireGuard 协议端到端加密"
+        echo "• 流量不经过任何中间服务器（点对点）"
+        echo "• 只有你的设备能看到这个IP"
+        echo "• 首次连接需要输入此电脑的登录密码"
         echo ""
         
-        # Create convenience script
+        # 创建便捷脚本
         cat > ~/tailscale-info.sh <<EOF
 #!/bin/bash
-echo "Tailscale SSH Connection Information"
-echo "====================================="
+echo "Tailscale SSH 连接信息"
+echo "======================"
 echo "Tailscale IP: \$(tailscale ip -4)"
-echo "Username: $CURRENT_USER"
+echo "用户名: $CURRENT_USER"
 echo ""
-echo "SSH command:"
+echo "SSH 命令:"
 echo "  ssh $CURRENT_USER@\$(tailscale ip -4)"
 echo ""
-echo "Tailscale status:"
+echo "Tailscale 状态:"
 tailscale status
 EOF
         chmod +x ~/tailscale-info.sh
         
-        echo "💡 Tips"
+        echo "💡 小贴士"
         echo "=========================================="
-        echo "• Run ~/tailscale-info.sh to view connection info"
-        echo "• Run 'tailscale status' to see all devices"
-        echo "• Visit https://login.tailscale.com/admin/machines"
-        echo "  to manage all your devices via web"
+        echo "• 运行 ~/tailscale-info.sh 查看连接信息"
+        echo "• 运行 'tailscale status' 查看所有设备"
+        echo "• 访问 https://login.tailscale.com/admin/machines"
+        echo "  可以在网页管理你的所有设备"
         echo ""
         
     else
-        echo "⚠️  Unable to get Tailscale IP"
-        echo "   Please check if Tailscale connected successfully"
-        echo "   Run: tailscale status"
+        echo "⚠️  无法获取 Tailscale IP"
+        echo "   请检查 Tailscale 是否已成功连接"
+        echo "   运行: tailscale status"
     fi
 }
 
-# Main function
+# 主函数
 main() {
-    # Check permissions
+    # 检查权限
     if ! sudo -v; then
-        echo "❌ Sudo privileges required"
+        echo "❌ 需要 sudo 权限"
         exit 1
     fi
     
@@ -191,9 +191,10 @@ main() {
     show_connection_info
     
     echo "=========================================="
-    echo "✨ All done! You can close this window now"
+    echo "✨ 全部完成！可以关闭此窗口了"
     echo "=========================================="
 }
 
 main
+
 

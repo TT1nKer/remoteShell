@@ -1,96 +1,96 @@
-# Windows SSH Server - Safe Version
-# This version uses Windows native features and won't trigger antivirus
-# Usage: irm https://raw.githubusercontent.com/TT1nKer/remoteShell/main/setup-ssh-windows-safe.ps1 | iex
-# Or: Right-click -> Run as Administrator
+# Windows SSH服务器 - 安全保守版本
+# 此版本使用Windows原生功能，不会被杀毒软件误报
+# 使用方法: irm https://raw.githubusercontent.com/TT1nKer/remoteShell/cn/setup-ssh-windows-safe.ps1 | iex
+# 或者: 右键 -> 以管理员身份运行
 
 Write-Host "========================================" -ForegroundColor Cyan
-Write-Host "Windows SSH Safe Setup Wizard" -ForegroundColor Cyan
+Write-Host "Windows SSH 安全配置向导" -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host ""
 
-# Check admin privileges
+# 检查管理员权限
 $isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 if (-not $isAdmin) {
-    Write-Host "❌ Administrator privileges required" -ForegroundColor Red
+    Write-Host "❌ 需要管理员权限运行此脚本" -ForegroundColor Red
     Write-Host ""
-    Write-Host "Please follow these steps:" -ForegroundColor Yellow
-    Write-Host "1. Right-click this script" -ForegroundColor White
-    Write-Host "2. Select 'Run as administrator'" -ForegroundColor White
+    Write-Host "请执行以下步骤:" -ForegroundColor Yellow
+    Write-Host "1. 右键点击此脚本" -ForegroundColor White
+    Write-Host "2. 选择 '以管理员身份运行'" -ForegroundColor White
     Write-Host ""
-    Read-Host "Press Enter to exit"
+    Read-Host "按回车键退出"
     exit 1
 }
 
-Write-Host "✅ Administrator access confirmed" -ForegroundColor Green
+Write-Host "✅ 管理员权限确认" -ForegroundColor Green
 Write-Host ""
 
-# Step 1: Check if OpenSSH is installed
-Write-Host "Step 1/4: Check OpenSSH Server" -ForegroundColor Yellow
+# 步骤1: 检查OpenSSH是否已安装
+Write-Host "步骤 1/4: 检查 OpenSSH Server" -ForegroundColor Yellow
 Write-Host "-------------------------------------------" -ForegroundColor Gray
 
 $sshCapability = Get-WindowsCapability -Online | Where-Object Name -like 'OpenSSH.Server*'
 
 if ($sshCapability.State -eq "Installed") {
-    Write-Host "  ✅ OpenSSH Server already installed" -ForegroundColor Green
+    Write-Host "  ✅ OpenSSH Server 已安装" -ForegroundColor Green
 } else {
-    Write-Host "  📦 Installing OpenSSH Server..." -ForegroundColor White
-    Write-Host "     (This is an official Windows component, completely safe)" -ForegroundColor Gray
+    Write-Host "  📦 正在安装 OpenSSH Server..." -ForegroundColor White
+    Write-Host "     (这是Windows官方组件，完全安全)" -ForegroundColor Gray
     
     try {
         Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0 -ErrorAction Stop | Out-Null
-        Write-Host "  ✅ Installation successful" -ForegroundColor Green
+        Write-Host "  ✅ 安装成功" -ForegroundColor Green
     } catch {
-        Write-Host "  ❌ Installation failed: $_" -ForegroundColor Red
+        Write-Host "  ❌ 安装失败: $_" -ForegroundColor Red
         Write-Host ""
-        Write-Host "Please install manually:" -ForegroundColor Yellow
-        Write-Host "  Settings → Apps → Optional features → Add a feature → OpenSSH Server" -ForegroundColor White
-        Read-Host "Press Enter to exit"
+        Write-Host "请手动安装:" -ForegroundColor Yellow
+        Write-Host "  设置 -> 应用 -> 可选功能 -> 添加功能 -> OpenSSH 服务器" -ForegroundColor White
+        Read-Host "按回车键退出"
         exit 1
     }
 }
 
 Write-Host ""
 
-# Step 2: Start service
-Write-Host "Step 2/4: Start SSH Service" -ForegroundColor Yellow
+# 步骤2: 启动服务
+Write-Host "步骤 2/4: 启动 SSH 服务" -ForegroundColor Yellow
 Write-Host "-------------------------------------------" -ForegroundColor Gray
 
 try {
     $sshdService = Get-Service -Name sshd -ErrorAction Stop
     
     if ($sshdService.Status -ne "Running") {
-        Write-Host "  🚀 Starting service..." -ForegroundColor White
+        Write-Host "  🚀 正在启动服务..." -ForegroundColor White
         Start-Service sshd -ErrorAction Stop
-        Write-Host "  ✅ Service started" -ForegroundColor Green
+        Write-Host "  ✅ 服务已启动" -ForegroundColor Green
     } else {
-        Write-Host "  ✅ Service already running" -ForegroundColor Green
+        Write-Host "  ✅ 服务已在运行" -ForegroundColor Green
     }
     
-    # Set automatic startup
+    # 设置自动启动
     if ($sshdService.StartType -ne "Automatic") {
-        Write-Host "  ⚙️  Setting automatic startup..." -ForegroundColor White
+        Write-Host "  ⚙️  设置开机自动启动..." -ForegroundColor White
         Set-Service -Name sshd -StartupType 'Automatic' -ErrorAction Stop
-        Write-Host "  ✅ Automatic startup configured" -ForegroundColor Green
+        Write-Host "  ✅ 已设置自动启动" -ForegroundColor Green
     } else {
-        Write-Host "  ✅ Automatic startup already configured" -ForegroundColor Green
+        Write-Host "  ✅ 已配置自动启动" -ForegroundColor Green
     }
     
 } catch {
-    Write-Host "  ❌ Start failed: $_" -ForegroundColor Red
-    Read-Host "Press Enter to exit"
+    Write-Host "  ❌ 启动失败: $_" -ForegroundColor Red
+    Read-Host "按回车键退出"
     exit 1
 }
 
 Write-Host ""
 
-# Step 3: Configure firewall
-Write-Host "Step 3/4: Configure Firewall" -ForegroundColor Yellow
+# 步骤3: 配置防火墙
+Write-Host "步骤 3/4: 配置防火墙" -ForegroundColor Yellow
 Write-Host "-------------------------------------------" -ForegroundColor Gray
 
 $firewallRule = Get-NetFirewallRule -Name "OpenSSH-Server-In-TCP" -ErrorAction SilentlyContinue
 
 if ($null -eq $firewallRule) {
-    Write-Host "  🔥 Adding firewall rule..." -ForegroundColor White
+    Write-Host "  🔥 添加防火墙规则..." -ForegroundColor White
     try {
         New-NetFirewallRule -Name 'OpenSSH-Server-In-TCP' `
             -DisplayName 'OpenSSH Server (sshd)' `
@@ -100,114 +100,115 @@ if ($null -eq $firewallRule) {
             -Action Allow `
             -LocalPort 22 `
             -ErrorAction Stop | Out-Null
-        Write-Host "  ✅ Firewall rule added" -ForegroundColor Green
+        Write-Host "  ✅ 防火墙规则已添加" -ForegroundColor Green
     } catch {
-        Write-Host "  ⚠️  Firewall configuration failed: $_" -ForegroundColor Yellow
-        Write-Host "     (Manual firewall configuration may be needed)" -ForegroundColor Gray
+        Write-Host "  ⚠️  防火墙配置失败: $_" -ForegroundColor Yellow
+        Write-Host "     (可能需要手动配置防火墙)" -ForegroundColor Gray
     }
 } else {
-    Write-Host "  ✅ Firewall rule already exists" -ForegroundColor Green
+    Write-Host "  ✅ 防火墙规则已存在" -ForegroundColor Green
 }
 
 Write-Host ""
 
-# Step 4: Get network information
-Write-Host "Step 4/4: Get Connection Info" -ForegroundColor Yellow
+# 步骤4: 获取网络信息
+Write-Host "步骤 4/4: 获取连接信息" -ForegroundColor Yellow
 Write-Host "-------------------------------------------" -ForegroundColor Gray
 
 $currentUser = $env:USERNAME
 $computerName = $env:COMPUTERNAME
 
-# Get local IP
+# 获取本地IP
 $localIP = (Get-NetIPAddress -AddressFamily IPv4 | 
     Where-Object {$_.InterfaceAlias -notlike "*Loopback*" -and $_.IPAddress -notlike "169.254.*"} | 
     Select-Object -First 1).IPAddress
 
-Write-Host "  Local IP: $localIP" -ForegroundColor White
-Write-Host "  Computer name: $computerName" -ForegroundColor White
-Write-Host "  Current user: $currentUser" -ForegroundColor White
+Write-Host "  本地IP地址: $localIP" -ForegroundColor White
+Write-Host "  计算机名称: $computerName" -ForegroundColor White
+Write-Host "  当前用户: $currentUser" -ForegroundColor White
 
-# Try to get public IP (timeout to avoid hanging)
+# 尝试获取公网IP（超时设置避免卡死）
 Write-Host ""
-Write-Host "  Fetching public IP..." -ForegroundColor Gray
+Write-Host "  正在获取公网IP..." -ForegroundColor Gray
 try {
     $publicIP = (Invoke-WebRequest -Uri "http://ifconfig.me/ip" -UseBasicParsing -TimeoutSec 3).Content.Trim()
-    Write-Host "  Public IP: $publicIP" -ForegroundColor White
+    Write-Host "  公网IP地址: $publicIP" -ForegroundColor White
 } catch {
-    Write-Host "  Public IP: Unable to fetch (normal)" -ForegroundColor Gray
-    $publicIP = "<need to check>"
+    Write-Host "  公网IP地址: 无法获取 (正常)" -ForegroundColor Gray
+    $publicIP = "<需要查询>"
 }
 
 Write-Host ""
 Write-Host ""
 
-# Summary
+# 完成总结
 Write-Host "========================================" -ForegroundColor Cyan
-Write-Host "✅ Setup Complete! SSH Server Ready" -ForegroundColor Green
+Write-Host "✅ 配置完成！SSH 服务器已就绪" -ForegroundColor Green
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host ""
 
-Write-Host "📝 Connection Information" -ForegroundColor Yellow
+Write-Host "📝 连接信息" -ForegroundColor Yellow
 Write-Host "-------------------------------------------" -ForegroundColor Gray
 Write-Host ""
-Write-Host "Local network connection:" -ForegroundColor White
+Write-Host "本地网络连接命令:" -ForegroundColor White
 Write-Host "  ssh $currentUser@$localIP" -ForegroundColor Cyan
 Write-Host ""
 
-if ($publicIP -ne "<need to check>") {
-    Write-Host "Remote connection (requires router config):" -ForegroundColor White
+if ($publicIP -ne "<需要查询>") {
+    Write-Host "远程连接命令 (需配置路由器):" -ForegroundColor White
     Write-Host "  ssh $currentUser@$publicIP" -ForegroundColor Cyan
     Write-Host ""
 }
 
-Write-Host "Tips:" -ForegroundColor Yellow
-Write-Host "  • First connection requires Windows login password" -ForegroundColor Gray
-Write-Host "  • For external access, configure router port forwarding" -ForegroundColor Gray
-Write-Host "  • Recommend using SSH key authentication instead of password" -ForegroundColor Gray
+Write-Host "提示:" -ForegroundColor Yellow
+Write-Host "  • 首次连接需要输入Windows登录密码" -ForegroundColor Gray
+Write-Host "  • 如需从外网访问，请配置路由器端口转发" -ForegroundColor Gray
+Write-Host "  • 建议使用SSH密钥认证代替密码" -ForegroundColor Gray
 Write-Host ""
 
-# Save info to desktop
-$infoFile = "$env:USERPROFILE\Desktop\SSH-Connection-Info.txt"
+# 保存信息到桌面
+$infoFile = "$env:USERPROFILE\Desktop\SSH连接信息.txt"
 $infoContent = @"
-Windows SSH Server Connection Information
+Windows SSH 服务器连接信息
 ========================================
-Setup time: $(Get-Date -Format "yyyy-MM-dd HH:mm:ss")
+配置时间: $(Get-Date -Format "yyyy-MM-dd HH:mm:ss")
 
-Connection info:
-  Local IP: $localIP
-  Public IP: $publicIP
-  Username: $currentUser
-  Computer name: $computerName
+连接信息:
+  本地IP: $localIP
+  公网IP: $publicIP
+  用户名: $currentUser
+  计算机名: $computerName
 
-Local connection:
+本地连接命令:
   ssh $currentUser@$localIP
 
-Remote connection (requires router port forwarding):
+远程连接命令 (需配置路由器端口转发):
   ssh $currentUser@$publicIP
 
-Next steps:
-  1. Test connection within same network
-  2. Configure router port forwarding (forward port 22 to $localIP)
-  3. Setup SSH key authentication (optional but recommended)
+下一步:
+  1. 在同一局域网内测试连接
+  2. 配置路由器端口转发 (将22端口转发到 $localIP)
+  3. 设置SSH密钥认证 (可选但推荐)
 
-Check service status:
+查看服务状态:
   Get-Service sshd
 
-Restart SSH service:
+重启SSH服务:
   Restart-Service sshd
 
-Stop SSH service:
+停止SSH服务:
   Stop-Service sshd
 "@
 
 try {
     $infoContent | Out-File -FilePath $infoFile -Encoding UTF8
-    Write-Host "✅ Connection info saved to desktop: SSH-Connection-Info.txt" -ForegroundColor Green
+    Write-Host "✅ 连接信息已保存到桌面: SSH连接信息.txt" -ForegroundColor Green
 } catch {
-    Write-Host "⚠️  Unable to save to desktop, but service is running normally" -ForegroundColor Yellow
+    Write-Host "⚠️  无法保存到桌面，但服务已正常运行" -ForegroundColor Yellow
 }
 
 Write-Host ""
 Write-Host "========================================" -ForegroundColor Cyan
-Read-Host "Press Enter to exit"
+Read-Host "按回车键退出"
+
 

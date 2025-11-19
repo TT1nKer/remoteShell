@@ -1,17 +1,17 @@
-# Remote SSH Setup
+# 远程SSH配置
 
-## Fastest Solution (5 minutes)
+## 最快方案（5分钟）
 
 ### Tailscale + SSH
 
-1. Download Tailscale: https://tailscale.com/download
-2. Login (use Google/GitHub account)
-3. Enable SSH:
+1. 下载安装 Tailscale: https://tailscale.com/download
+2. 登录（用 Google/GitHub 账号）
+3. 启用SSH:
 
 **Windows:**
 ```
-Settings → Apps → Optional Features → OpenSSH Server → Install
-services.msc → OpenSSH SSH Server → Start
+设置 → 应用 → 可选功能 → OpenSSH Server → 安装
+services.msc → OpenSSH SSH Server → 启动
 ```
 
 **Mac:**
@@ -24,18 +24,18 @@ sudo systemsetup -setremotelogin on
 sudo apt install openssh-server -y
 ```
 
-4. Get IP: `tailscale ip -4`
-5. Connect: `ssh username@100.x.x.x`
+4. 获取IP: `tailscale ip -4`
+5. 连接: `ssh 用户名@100.x.x.x`
 
 ---
 
-## Traditional SSH Solution
+## 传统SSH方案
 
-### Automated Scripts
+### 自动脚本
 
 **Windows:**
 ```powershell
-# Run PowerShell as Administrator
+# 以管理员运行 PowerShell
 .\setup-ssh-windows-safe.ps1
 ```
 
@@ -44,10 +44,10 @@ sudo apt install openssh-server -y
 sudo bash setup-ssh-server.sh
 ```
 
-### Manual Installation
+### 手动安装
 
 **Windows:**
-Settings → Apps → OpenSSH Server → Install + Start Service
+设置 → 应用 → OpenSSH Server → 安装 + 启动服务
 
 **Mac:**
 `sudo systemsetup -setremotelogin on`
@@ -55,44 +55,60 @@ Settings → Apps → OpenSSH Server → Install + Start Service
 **Linux:**
 `sudo apt install openssh-server`
 
-Then configure router port forwarding (22 → your PC IP)
+然后配置路由器端口转发（22 → 本机IP）
 
 ---
 
-## Files
+## 文件说明
 
-### Documentation
-- `START_HERE.md` - Quick start guide ⭐ **Start here!**
-- `ANTIVIRUS_SOLUTION.md` - How to handle antivirus blocking
+### 中文文档
+- `START_HERE_开始阅读.md` - 快速开始指南 ⭐ **从这里开始！**
+- `解决杀毒软件拦截的完整方案.md` - 杀毒软件解决方案
+- `QUICK_START.md` - 详细快速指南
+- `README_SSH_SETUP.md` - 完整技术文档
+- `WINDOWS_SAFE_GUIDE.md` - Windows 安全指南
 
-### Scripts
-- `setup-ssh-server.sh` - Mac/Linux automated setup
-- `setup-ssh-windows-safe.ps1` - Windows safe setup  
-- `setup-tailscale-ssh.sh` - Tailscale automated setup
+### 自动化脚本
+- `setup-ssh-server.sh` - Linux/Mac 自动安装
+- `setup-ssh-windows-safe.ps1` - Windows 安全安装
+- `setup-tailscale-ssh.sh` - Tailscale 自动安装
 
-### One-Line Install Commands
+### 一键安装命令
 
 **Linux/Mac:**
 ```bash
-curl -fsSL https://raw.githubusercontent.com/TT1nKer/remoteShell/main/setup-ssh-server.sh | bash
+curl -fsSL https://raw.githubusercontent.com/TT1nKer/remoteShell/cn/setup-ssh-server.sh | bash
 ```
 
-**Windows (PowerShell as Admin):**
+**Windows (以管理员身份运行 PowerShell):**
 ```powershell
-irm https://raw.githubusercontent.com/TT1nKer/remoteShell/main/setup-ssh-windows-safe.ps1 | iex
+irm https://raw.githubusercontent.com/TT1nKer/remoteShell/cn/setup-ssh-windows-safe.ps1 | iex
 ```
 
 **Tailscale (Linux/Mac):**
 ```bash
-curl -fsSL https://raw.githubusercontent.com/TT1nKer/remoteShell/main/setup-tailscale-ssh.sh | bash
+curl -fsSL https://raw.githubusercontent.com/TT1nKer/remoteShell/cn/setup-tailscale-ssh.sh | bash
 ```
 
 ---
 
-## Key Points
+## 关键要点
 
-✅ Must install SSH server on target computer
-✅ Tailscale doesn't require router configuration
-✅ Traditional SSH needs public IP + port forwarding
-✅ All solutions are free
+✅ 必须在目标电脑安装SSH服务端
+✅ Tailscale不需要配置路由器
+✅ 传统SSH需要公网IP + 端口转发
+✅ 全部方案免费
 
+---
+
+## 语言版本
+
+- **中文版 (当前分支):** `cn` 分支
+- **English Version:** `main` 分支
+
+切换到英文版：
+```bash
+git checkout main
+```
+
+或访问：https://github.com/TT1nKer/remoteShell/tree/main
