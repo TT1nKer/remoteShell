@@ -17,6 +17,9 @@ services.msc → OpenSSH SSH Server → Start
 **Windows (PowerShell if not found):**
 ```powershell
 Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
+
+# If stuck at 40%, use DISM instead:
+dism /Online /Add-Capability /CapabilityName:OpenSSH.Server~~~~0.0.1.0
 ```
 
 **Mac:**
